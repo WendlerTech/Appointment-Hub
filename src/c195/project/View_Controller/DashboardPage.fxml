@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="490.0" prefWidth="837.0" xmlns="http://javafx.com/javafx/8.0.152" xmlns:fx="http://javafx.com/fxml/1" fx:controller="c195.project.View_Controller.DashboardPageController">
+  <children>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: lightgrey;" VBox.vgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="100.0" fitWidth="491.0" layoutX="15.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
+               <image>
+                  <Image url="@Media/Wendler%20Tech%20Hex%20Logo.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="lblDashWelcome" layoutX="603.0" layoutY="61.0" text="Welcome, User" AnchorPane.rightAnchor="67.0" AnchorPane.topAnchor="61.0">
+               <font>
+                  <Font name="Calibri Light" size="27.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnDashAppt" layoutX="176.0" layoutY="178.0" mnemonicParsing="false" onAction="#openAppointmentsButtonHandler" prefHeight="37.0" prefWidth="143.0" text="Appointments" AnchorPane.leftAnchor="176.0">
+               <font>
+                  <Font name="Calibri Light" size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnDashCust" layoutX="518.0" layoutY="178.0" mnemonicParsing="false" onAction="#openCustomersButtonHandler" prefHeight="37.0" prefWidth="143.0" text="Customers" AnchorPane.rightAnchor="176.0">
+               <font>
+                  <Font name="Calibri Light" size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnDashCalendar" layoutX="176.0" layoutY="326.0" mnemonicParsing="false" onAction="#openCalendarButtonHandler" prefHeight="37.0" prefWidth="143.0" text="Calendar" AnchorPane.leftAnchor="176.0">
+               <font>
+                  <Font name="Calibri Light" size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnDashReports" layoutX="518.0" layoutY="326.0" mnemonicParsing="false" onAction="#openReportsButtonHandler" prefHeight="37.0" prefWidth="143.0" text="Reports" AnchorPane.rightAnchor="176.0">
+               <font>
+                  <Font name="Calibri Light" size="20.0" />
+               </font>
+            </Button>
+            <Label layoutX="127.0" layoutY="220.0" text="View, update or delete appointments">
+               <font>
+                  <Font name="Calibri Light" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="481.0" layoutY="220.0" text="View, update or delete customers" AnchorPane.rightAnchor="138.0">
+               <font>
+                  <Font name="Calibri Light" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="125.0" layoutY="368.0" text="View appointments by week or month">
+               <font>
+                  <Font name="Calibri Light" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="493.0" layoutY="368.0" text="View various available reports" AnchorPane.rightAnchor="151.0">
+               <font>
+                  <Font name="Calibri Light" size="16.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnDashLogOut" layoutX="14.0" layoutY="446.0" mnemonicParsing="false" onAction="#logOutButtonHandler" text="Log Out" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0">
+               <font>
+                  <Font name="Calibri Light" size="16.0" />
+               </font>
+            </Button>
+         </children>
+    </AnchorPane>
+  </children>
+</VBox>

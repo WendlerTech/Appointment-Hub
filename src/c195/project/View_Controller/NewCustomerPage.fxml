@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox minWidth="-Infinity" prefHeight="515.0" prefWidth="485.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/8.0.152" xmlns:fx="http://javafx.com/fxml/1" fx:controller="c195.project.View_Controller.NewCustomerPageController">
+  <children>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" minWidth="-Infinity" prefHeight="521.0" prefWidth="485.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label layoutX="158.0" layoutY="29.0" text="New Customer">
+               <font>
+                  <Font name="Calibri" size="28.0" />
+               </font>
+            </Label>
+            <Label layoutX="105.0" layoutY="105.0" text="Name:" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="326.0">
+               <font>
+                  <Font name="Calibri Light" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="145.0" text="Phone Number:" AnchorPane.leftAnchor="31.0" AnchorPane.rightAnchor="326.0">
+               <font>
+                  <Font name="Calibri Light" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="89.0" layoutY="265.0" text="Address:" AnchorPane.leftAnchor="89.0" AnchorPane.rightAnchor="326.0">
+               <font>
+                  <Font name="Calibri Light" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="76.0" layoutY="305.0" text="Address 2:" AnchorPane.leftAnchor="74.0" AnchorPane.rightAnchor="326.0">
+               <font>
+                  <Font name="Calibri Light" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="81.0" layoutY="345.0" text="Zip Code:" AnchorPane.leftAnchor="83.0" AnchorPane.rightAnchor="326.0">
+               <font>
+                  <Font name="Calibri Light" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="123.0" layoutY="226.0" text="City:" AnchorPane.leftAnchor="123.0" AnchorPane.rightAnchor="326.0">
+               <font>
+                  <Font name="Calibri Light" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="92.0" layoutY="385.0" text="Active:" AnchorPane.leftAnchor="104.0" AnchorPane.rightAnchor="326.0">
+               <font>
+                  <Font name="Calibri Light" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="89.0" layoutY="186.0" text="Country:" AnchorPane.leftAnchor="89.0" AnchorPane.rightAnchor="326.0">
+               <font>
+                  <Font name="Calibri Light" size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtNewCustName" layoutX="243.0" layoutY="102.0" AnchorPane.rightAnchor="67.0" />
+            <TextField fx:id="txtNewCustPhone" layoutX="243.0" layoutY="142.0" AnchorPane.rightAnchor="67.0" />
+            <ComboBox fx:id="cmbNewCustCountry" layoutX="243.0" layoutY="182.0" onAction="#countryComboEventHandler" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="67.0" />
+            <ComboBox fx:id="cmbNewCustCity" disable="true" layoutX="243.0" layoutY="222.0" prefHeight="30.0" prefWidth="175.0" promptText="Select a country" AnchorPane.rightAnchor="67.0" />
+            <TextField fx:id="txtNewCustAddress1" layoutX="243.0" layoutY="262.0" AnchorPane.rightAnchor="67.0" />
+            <TextField fx:id="txtNewCustAddress2" layoutX="243.0" layoutY="302.0" AnchorPane.rightAnchor="67.0" />
+            <TextField fx:id="txtNewCustZip" layoutX="243.0" layoutY="342.0" AnchorPane.rightAnchor="67.0" />
+            <CheckBox fx:id="chkNewCustActive" layoutX="245.0" layoutY="387.0" mnemonicParsing="false" AnchorPane.rightAnchor="215.0" />
+            <Button fx:id="btnAddCustomer" layoutX="175.0" layoutY="434.0" mnemonicParsing="false" onAction="#saveNewCustButtonHandler" prefWidth="135.0" text="Add Customer" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="175.0" />
+            <Button fx:id="btnNewCustClear" layoutX="245.0" layoutY="469.0" mnemonicParsing="false" onAction="#clearNewCustButtonHandler" prefWidth="65.0" text="Clear" AnchorPane.rightAnchor="175.0" />
+            <Button fx:id="btnNewCustCancel" cancelButton="true" layoutX="175.0" layoutY="469.0" mnemonicParsing="false" onAction="#cancelNewCustButtonHandler" prefWidth="65.0" text="Cancel" AnchorPane.leftAnchor="175.0" />
+         </children>
+    </AnchorPane>
+  </children>
+</VBox>
