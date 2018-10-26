@@ -41,11 +41,12 @@ public class DashboardPageController implements Initializable {
 
     //Updates welcome label with the user's name
     public void setUserNameLabel(String username) {
+        String formattedUsername = capitalizeFirstLetter(username);
         //Moves username to next line if user has a long name (for formatting)
-        if (username.length() > 10) {
-            lblDashWelcome.setText("Welcome, \n" + username + ".");
-        } else if (username.length() > 0) {
-            lblDashWelcome.setText("Welcome, " + username + ".");
+        if (formattedUsername.length() > 10) {
+            lblDashWelcome.setText("Welcome, \n" + formattedUsername + ".");
+        } else if (formattedUsername.length() > 0) {
+            lblDashWelcome.setText("Welcome, " + formattedUsername + ".");
         } else {
             //No username entered
             lblDashWelcome.setText("Welcome.");
@@ -83,5 +84,15 @@ public class DashboardPageController implements Initializable {
 
     public void setMainApp(C195ProjectWendler mainApp) {
         this.mainApp = mainApp;
+    }
+    
+    public String capitalizeFirstLetter(String original) {
+        //Capitalizes first letter of a string       
+         if (original == null || original.length() == 0) {
+             return original;
+        } else {             
+            original = original.toLowerCase();
+            return original.substring(0, 1).toUpperCase() + original.substring(1);
+         }
     }
 }

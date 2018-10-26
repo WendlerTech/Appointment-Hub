@@ -26,7 +26,7 @@
             </Label>
             <TextField fx:id="txtLoginUsername" alignment="CENTER" layoutX="227.0" layoutY="213.0" prefHeight="30.0" prefWidth="382.0" AnchorPane.leftAnchor="227.0" AnchorPane.rightAnchor="228.0" AnchorPane.topAnchor="213.0" />
             <PasswordField fx:id="txtLoginPassword" alignment="CENTER" layoutX="227.0" layoutY="289.0" prefHeight="30.0" prefWidth="382.0" AnchorPane.leftAnchor="227.0" AnchorPane.rightAnchor="228.0" AnchorPane.topAnchor="289.0" />
-            <Button fx:id="btnLogin" alignment="CENTER" layoutX="317.0" layoutY="388.0" mnemonicParsing="false" onAction="#loginButtonHandler" prefHeight="34.0" prefWidth="202.0" text="Login" AnchorPane.leftAnchor="317.0" AnchorPane.rightAnchor="318.0" AnchorPane.topAnchor="388.0">
+            <Button fx:id="btnLogin" alignment="CENTER" layoutX="407.0" layoutY="377.0" mnemonicParsing="false" onAction="#loginButtonHandler" prefHeight="34.0" prefWidth="175.0" text="Login" AnchorPane.leftAnchor="407.0" AnchorPane.rightAnchor="228.0" AnchorPane.topAnchor="377.0">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
@@ -36,6 +36,11 @@
                   <Image url="@Media/Wendler%20Tech%20Hex%20Logo.png" />
                </image>
             </ImageView>
+            <Button fx:id="btnLoginRegister" alignment="CENTER" layoutX="227.0" layoutY="377.0" mnemonicParsing="false" onAction="#registerButtonHandler" prefHeight="34.0" prefWidth="175.0" text="Register" AnchorPane.leftAnchor="227.0" AnchorPane.rightAnchor="435.0" AnchorPane.topAnchor="377.0">
+               <font>
+                  <Font name="Calibri Light" size="18.0" />
+               </font>
+            </Button>
       </children>
     </AnchorPane>
   </children>

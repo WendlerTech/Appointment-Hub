@@ -45,6 +45,9 @@
             </Button>
             <ComboBox fx:id="cmbReportsApptType" layoutX="483.0" layoutY="107.0" prefWidth="165.0" promptText="Type" visible="false" AnchorPane.rightAnchor="194.0" />
             <ComboBox fx:id="cmbReportsMonth" layoutX="648.0" layoutY="107.0" prefWidth="165.0" promptText="Month" visible="false" AnchorPane.rightAnchor="24.0" />
+            <ComboBox fx:id="cmbReportsConsultantName" layoutX="648.0" layoutY="107.0" prefWidth="165.0" promptText="Consultant Name" visible="false" AnchorPane.rightAnchor="24.0" />
+            <ComboBox fx:id="cmbReportsCity" layoutX="648.0" layoutY="107.0" prefWidth="165.0" promptText="City" visible="false" AnchorPane.rightAnchor="24.0" />
+            <ComboBox fx:id="cmbReportsCountry" layoutX="483.0" layoutY="107.0" onAction="#countryComboEventHandler" prefWidth="165.0" promptText="Country" visible="false" AnchorPane.rightAnchor="194.0" />
          </children>
     </AnchorPane>
   </children>

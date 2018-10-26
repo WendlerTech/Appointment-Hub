@@ -1,5 +1,6 @@
 package c195.project;
 
+import static c195.project.DatabaseHelper.getConnection;
 import c195.project.View_Controller.AppointmentsPageController;
 import c195.project.View_Controller.CalendarPageController;
 import c195.project.View_Controller.CustomerPageController;
@@ -7,13 +8,18 @@ import c195.project.View_Controller.DashboardPageController;
 import c195.project.View_Controller.LoginPageController;
 import c195.project.View_Controller.ReportsPageController;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -23,6 +29,7 @@ public class C195ProjectWendler extends Application {
 
     private Stage primaryStage;
     private String currentUserName = "";
+    private ResultSet resultSet = null;
 
     public C195ProjectWendler() {
         
@@ -47,9 +54,32 @@ public class C195ProjectWendler extends Application {
     }
     
     public void loginButton(String username, String password) {
-        //TO-DO: Verify login data
-        currentUserName = username;
-        openDashboard();
+        //Verifies login data. Cast as binary makes password case-sensative.
+        String queryString = "SELECT * FROM user WHERE userName = ? AND "
+                + "CAST(password AS BINARY) = ?;";
+        
+        try (Connection conn = DatabaseHelper.getConnection();
+                PreparedStatement statement = conn.prepareStatement(queryString);) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+            
+            resultSet = statement.executeQuery();
+            
+            //If any result is returned, username & password match
+            if (resultSet.next()) {
+                currentUserName = username;
+                openDashboard();                
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR, 
+                        "Invalid username or password.");
+                alert.initStyle(StageStyle.UTILITY);
+                alert.setHeaderText(null);
+                alert.showAndWait();
+            }            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("There was an error, namely: " + e.getMessage());
+        }
     }
     
     public void openDashboard() {
@@ -147,9 +177,7 @@ public class C195ProjectWendler extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        DatabaseHelper.openConnection();
         launch(args);
-        DatabaseHelper.closeConnection();
     }
 
 }
