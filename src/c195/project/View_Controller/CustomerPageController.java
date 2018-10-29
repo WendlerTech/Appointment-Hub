@@ -1,9 +1,14 @@
 package c195.project.View_Controller;
 
+import c195.project.Address;
 import c195.project.C195ProjectWendler;
+import c195.project.Customer;
+import c195.project.DatabaseHelper;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,19 +30,15 @@ import javafx.stage.Stage;
 public class CustomerPageController implements Initializable {
 
     @FXML
-    private TableView<?> tblViewCustomers;
+    private TableView<Customer> tblViewCustomers;
     @FXML
-    private TableColumn<?, ?> colCustName;
+    private TableColumn<Customer, String> colCustName;
     @FXML
-    private TableColumn<?, ?> colCustPhone;
+    private TableColumn<Address, String> colCustPhone;
     @FXML
-    private TableColumn<?, ?> colCustAddress;
+    private TableColumn<Address, String> colCustCity;
     @FXML
-    private TableColumn<?, ?> colCustCity;
-    @FXML
-    private TableColumn<?, ?> colCustZip;
-    @FXML
-    private TableColumn<?, ?> colCustActive;
+    private TableColumn<Customer, Integer> colCustActive;
     @FXML
     private Label lblCustHeader;
     @FXML
@@ -55,7 +56,11 @@ public class CustomerPageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        try {
+        populateTableData();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }    
         
      public void setStage(Stage stage) {
@@ -65,6 +70,14 @@ public class CustomerPageController implements Initializable {
     public void setMainApp(C195ProjectWendler mainApp) {
         this.mainApp = mainApp;
     }     
+    
+    
+    public void populateTableData() throws SQLException {
+        ObservableList<Customer> custList = DatabaseHelper.getCustomerList();
+        
+        //TO-DO: Grab address list, create "CustomerTableRow" object that takes 
+        //info from both lists & populate the Customer TableView with said object
+    }
     
     @FXML
     void custGoBackButtonHandler(ActionEvent event) throws IOException {
@@ -80,7 +93,7 @@ public class CustomerPageController implements Initializable {
             NewCustomerPageController controller = loader.getController();
             
             Stage stage = new Stage();
-            controller.setStage(stage);
+            controller.setStage(stage, mainApp.getCurrentUserName());
             stage.getIcons().add(new Image(C195ProjectWendler.class.getResourceAsStream("View_Controller/Media/W Icon.png")));
             
             stage.setScene(new Scene(root));
@@ -93,7 +106,7 @@ public class CustomerPageController implements Initializable {
     }
     
     @FXML
-    void updateCustomerButtonHandler(ActionEvent event) {
+    void updateCustomerButtonHandler(ActionEvent event) throws SQLException {
         
     }
     

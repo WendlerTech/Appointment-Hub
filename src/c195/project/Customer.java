@@ -10,12 +10,12 @@ public class Customer {
     
     private int custID;
     private int addressID;
-    private boolean isActive;
+    private int isActive;
     private String custName;
     private String createdBy;
     private String lastUpdatedBy;
     private String createDate;
-    private Timestamp lastUpdate;
+    private String lastUpdate;
     
     public Customer() {
         
@@ -24,7 +24,11 @@ public class Customer {
     public Customer(String name, boolean isActive, int address) {
         custName = name;
         addressID = address;
-        this.isActive = isActive;        
+        if (isActive) {
+            this.isActive = 1;
+        } else {
+            this.isActive = 0;
+        }
     }
 
     /**
@@ -58,7 +62,7 @@ public class Customer {
     /**
      * @return the isActive
      */
-    public boolean isIsActive() {
+    public int isIsActive() {
         return isActive;
     }
 
@@ -66,7 +70,11 @@ public class Customer {
      * @param isActive the isActive to set
      */
     public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
+        if (isActive) {
+            this.isActive = 1;
+        } else {
+            this.isActive = 0;
+        }
     }
 
     /**
@@ -128,14 +136,14 @@ public class Customer {
     /**
      * @return the lastUpdate
      */
-    public Timestamp getLastUpdate() {
+    public String getLastUpdate() {
         return lastUpdate;
     }
 
     /**
      * @param lastUpdate the lastUpdate to set
      */
-    public void setLastUpdate(Timestamp lastUpdate) {
+    public void setLastUpdate(String lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 }

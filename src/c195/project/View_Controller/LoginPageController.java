@@ -65,7 +65,7 @@ public class LoginPageController implements Initializable {
                     + "desired username & password, then click register.");
         } else {
             if (matchRegex(username)) {
-                mainApp.loginButton(username, password);
+                mainApp.loginButton(username, password, false);
             } else {
                 showErrorAlert("Invalid character in username.");
             }
@@ -101,7 +101,7 @@ public class LoginPageController implements Initializable {
 
                         if (alert.getResult() == ButtonType.YES) {
                             DatabaseHelper.addNewUser(newUsername, newPassword);
-                            mainApp.loginButton(newUsername, newPassword);
+                            mainApp.loginButton(newUsername, newPassword, true);
                         }
                     } else {
                         showErrorAlert("Username is already taken.");

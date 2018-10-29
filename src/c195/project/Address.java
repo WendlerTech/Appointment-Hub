@@ -17,7 +17,7 @@ public class Address {
     private String createdBy;
     private String lastUpdatedBy;
     private String createDate;
-    private Timestamp lastUpdated;
+    private String lastUpdated;
     
     public Address() {
         
@@ -161,14 +161,14 @@ public class Address {
     /**
      * @return the lastUpdated
      */
-    public Timestamp getLastUpdated() {
+    public String getLastUpdated() {
         return lastUpdated;
     }
 
     /**
      * @param lastUpdated the lastUpdated to set
      */
-    public void setLastUpdated(Timestamp lastUpdated) {
+    public void setLastUpdated (String lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 }

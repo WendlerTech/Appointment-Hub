@@ -42,7 +42,7 @@ public class ReportsPageController implements Initializable {
     private Stage currentStage;
 
     private ObservableList cityListEngland = FXCollections.observableArrayList(
-            "London", "Manchaster", "Liverpool", "Birmingham");
+            "London", "Manchester", "Liverpool", "Birmingham");
     private ObservableList cityListUSA = FXCollections.observableArrayList(
             "Phoenix", "New York", "Seattle", "Houston", "Denver");
 

@@ -40,49 +40,49 @@ public class AppointmentsPageController implements Initializable {
     private Button btnApptAdd;
     @FXML
     private Button btnApptBack;
-    
+
     private C195ProjectWendler mainApp;
     private Stage currentStage;
-    
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
-     public void setStage(Stage stage) {
+    }
+
+    public void setStage(Stage stage) {
         currentStage = stage;
     }
-     
+
     public void setMainApp(C195ProjectWendler mainApp) {
         this.mainApp = mainApp;
-    }     
-    
+    }
+
     @FXML
     void apptGoBackButtonHandler(ActionEvent event) throws IOException {
         mainApp.openDashboard();
     }
-    
+
     @FXML
     void addAppointmentButtonHandler(ActionEvent event) {
-         try {
+        try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(C195ProjectWendler.class.getResource("View_Controller/NewAppointmentPage.fxml"));
             Parent root = loader.load();
             NewAppointmentPageController controller = loader.getController();
-            
+
             Stage stage = new Stage();
             controller.setStage(stage);
             stage.getIcons().add(new Image(C195ProjectWendler.class.getResourceAsStream("View_Controller/Media/W Icon.png")));
-            
+
             stage.setScene(new Scene(root));
             stage.setTitle("Add a new appointment");
-            stage.showAndWait();            
+            stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("There was an error, namely: " + e.getMessage());            
+            System.out.println("There was an error, namely: " + e.getMessage());
         }
     }
 }

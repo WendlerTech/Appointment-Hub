@@ -23,9 +23,7 @@
               <columns>
                 <TableColumn fx:id="colCustName" prefWidth="75.0" text="Name" />
                   <TableColumn fx:id="colCustPhone" prefWidth="94.0" text="Phone Number" />
-                <TableColumn fx:id="colCustAddress" prefWidth="85.0" text="Address" />
                   <TableColumn fx:id="colCustCity" minWidth="0.0" prefWidth="113.0" text="City" />
-                  <TableColumn fx:id="colCustZip" minWidth="0.0" prefWidth="58.0" text="Zip" />
                   <TableColumn fx:id="colCustActive" prefWidth="75.0" text="Active" />
               </columns>
                <columnResizePolicy>

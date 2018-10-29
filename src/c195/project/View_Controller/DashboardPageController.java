@@ -85,14 +85,14 @@ public class DashboardPageController implements Initializable {
     public void setMainApp(C195ProjectWendler mainApp) {
         this.mainApp = mainApp;
     }
-    
+
     public String capitalizeFirstLetter(String original) {
         //Capitalizes first letter of a string       
-         if (original == null || original.length() == 0) {
-             return original;
-        } else {             
+        if (original == null || original.length() == 0) {
+            return original;
+        } else {
             original = original.toLowerCase();
             return original.substring(0, 1).toUpperCase() + original.substring(1);
-         }
+        }
     }
 }

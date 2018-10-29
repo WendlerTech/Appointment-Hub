@@ -2,19 +2,23 @@ package c195.project.View_Controller;
 
 import c195.project.Address;
 import c195.project.Customer;
+import c195.project.DatabaseHelper;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -47,29 +51,30 @@ public class NewCustomerPageController implements Initializable {
     private Button btnNewCustCancel;
 
     private Stage currentStage;
-    Customer newCust;
-    Address custAddress;
-        
-    private ObservableList cityListUSA = FXCollections.observableArrayList(
-                "Phoenix", "New York", "Seattle", "Houston", "Denver");
-    private ObservableList cityListEngland = FXCollections.observableArrayList(
-                "London", "Manchaster", "Liverpool", "Birmingham");
-    
+    private Customer newCust;
+    private Address custAddress;
+    private String currentUser;
+
+    private final ObservableList cityListUSA = FXCollections.observableArrayList(
+            "Phoenix", "New York", "Seattle", "Houston", "Denver");
+    private final ObservableList cityListEngland = FXCollections.observableArrayList(
+            "London", "Manchester", "Liverpool", "Birmingham");
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Auto-adds hyphens to phone number field
-        txtNewCustPhone.setTextFormatter(new TextFormatter<>(change ->{
+        txtNewCustPhone.setTextFormatter(new TextFormatter<>(change -> {
             final int oldLength = change.getControlText().length();
             int newLength = change.getControlNewText().length();
-            
+
             //Backspace
             if (newLength < oldLength) {
                 return change;
             }
-            
+
             switch (newLength) {
                 //Adds a hyphen after the first 3 numbers (area code)
                 case 3:
@@ -91,40 +96,73 @@ public class NewCustomerPageController implements Initializable {
         }));
         ObservableList countryList = FXCollections.observableArrayList(
                 "USA", "England");
-        
+
         cmbNewCustCountry.setItems(countryList);
-    }    
-    
-     public void setStage(Stage stage) {
+    }
+
+    public void setStage(Stage stage, String currentUser) {
         currentStage = stage;
+        this.currentUser = currentUser;
     }
 
     @FXML
     void saveNewCustButtonHandler(ActionEvent event) {
         custAddress = new Address();
         newCust = new Customer();
-        
+
         String custName = txtNewCustName.getText();
         String address1 = txtNewCustAddress1.getText();
         String address2 = txtNewCustAddress2.getText();
         String zipCode = txtNewCustZip.getText();
         String phoneNum = txtNewCustPhone.getText();
         boolean isActive = chkNewCustActive.isSelected();
-        
-        custAddress.setAddress(address1);
-        custAddress.setAddress2(address2);
-        custAddress.setZipCode(zipCode);
-        custAddress.setPhoneNumber(phoneNum);
-        newCust.setCustName(custName);
-        newCust.setIsActive(isActive);
+
+        if (custName.length() > 0 && address1.length() > 0
+                && zipCode.length() > 0 && phoneNum.length() > 0 
+                && cmbNewCustCity.getValue() != null) {
+            int cityID = 0;
+            if (cmbNewCustCity.getValue() != null) {
+                cityID = DatabaseHelper.getCityID(cmbNewCustCity.getValue());
+            }
+
+            custAddress.setCityID(cityID);
+            custAddress.setAddress(address1);
+            custAddress.setAddress2(address2);
+            custAddress.setZipCode(zipCode);
+            custAddress.setPhoneNumber(phoneNum);
+            custAddress.setCreatedBy(currentUser);
+            custAddress.setLastUpdatedBy(currentUser);
+            custAddress.setCreateDate(DatabaseHelper.getCurrentDate());
+            custAddress.setLastUpdated(DatabaseHelper.getCurrentDate());
+            newCust.setCustName(custName);
+            newCust.setIsActive(isActive);
+            newCust.setCreateDate(DatabaseHelper.getCurrentDate());
+            newCust.setLastUpdate(DatabaseHelper.getCurrentDate());
+            newCust.setCreatedBy(currentUser);
+            newCust.setLastUpdatedBy(currentUser);
+
+            try {
+                DatabaseHelper.addNewCustomer(newCust, custAddress);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, 
+                    "Customer successfully added.");
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setHeaderText(null);
+            alert.showAndWait();
+            currentStage.close();
+        } else {
+            showErrorAlert("Please fill out all fields.");
+        }
     }
-    
+
     @FXML
     void cancelNewCustButtonHandler(ActionEvent event) {
         //Closes window
         currentStage.close();
     }
-    
+
     @FXML
     void clearNewCustButtonHandler(ActionEvent event) {
         //Clears all fields
@@ -137,28 +175,37 @@ public class NewCustomerPageController implements Initializable {
         cmbNewCustCity.getSelectionModel().clearSelection();
         chkNewCustActive.setSelected(false);
         cmbNewCustCity.setDisable(true);
-        cmbNewCustCity.setPromptText("Select a country");      
+        cmbNewCustCity.setPromptText("Select a country");
     }
-    
+
     @FXML
     void countryComboEventHandler(ActionEvent event) {
+        //Shows & hides appropriate combo boxes depending on user selection
         if (cmbNewCustCountry.getValue() != null) {
-        switch (cmbNewCustCountry.getValue()) {
-            case "USA":
-                cmbNewCustCity.setItems(cityListUSA);
-                cmbNewCustCity.setDisable(false);
-                cmbNewCustCity.setPromptText("Select a city");
-                break;
-            case "England":
-                cmbNewCustCity.setItems(cityListEngland);
-                cmbNewCustCity.setDisable(false);
-                cmbNewCustCity.setPromptText("Select a city");
-                break;            
-            default:
-                cmbNewCustCity.setDisable(true);
-                cmbNewCustCity.setPromptText("Select a country");
-                break;
+            switch (cmbNewCustCountry.getValue()) {
+                case "USA":
+                    cmbNewCustCity.setItems(cityListUSA);
+                    cmbNewCustCity.setDisable(false);
+                    cmbNewCustCity.setPromptText("Select a city");
+                    break;
+                case "England":
+                    cmbNewCustCity.setItems(cityListEngland);
+                    cmbNewCustCity.setDisable(false);
+                    cmbNewCustCity.setPromptText("Select a city");
+                    break;
+                default:
+                    cmbNewCustCity.setDisable(true);
+                    cmbNewCustCity.setPromptText("Select a country");
+                    break;
+            }
         }
-        }        
+    }
+
+    public void showErrorAlert(String message) {
+        //Shows an alert pop-up with no icon or header text
+        Alert alert = new Alert(Alert.AlertType.ERROR, message);
+        alert.initStyle(StageStyle.UTILITY);
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 }

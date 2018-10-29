@@ -1,6 +1,5 @@
 package c195.project;
 
-import static c195.project.DatabaseHelper.getConnection;
 import c195.project.View_Controller.AppointmentsPageController;
 import c195.project.View_Controller.CalendarPageController;
 import c195.project.View_Controller.CustomerPageController;
@@ -29,17 +28,17 @@ public class C195ProjectWendler extends Application {
 
     private Stage primaryStage;
     private String currentUserName = "";
+
     private ResultSet resultSet = null;
 
     public C195ProjectWendler() {
-        
+
     }
-    
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Wendler Tech");
-
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(C195ProjectWendler.class.getResource("View_Controller/LoginPage.fxml"));
@@ -50,57 +49,64 @@ public class C195ProjectWendler extends Application {
         primaryStage.getIcons().add(new Image(C195ProjectWendler.class.getResourceAsStream("View_Controller/Media/W Icon.png")));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
-    
-    public void loginButton(String username, String password) {
-        //Verifies login data. Cast as binary makes password case-sensative.
-        String queryString = "SELECT * FROM user WHERE userName = ? AND "
-                + "CAST(password AS BINARY) = ?;";
-        
-        try (Connection conn = DatabaseHelper.getConnection();
-                PreparedStatement statement = conn.prepareStatement(queryString);) {
-            statement.setString(1, username);
-            statement.setString(2, password);
-            
-            resultSet = statement.executeQuery();
-            
-            //If any result is returned, username & password match
-            if (resultSet.next()) {
-                currentUserName = username;
-                openDashboard();                
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR, 
-                        "Invalid username or password.");
-                alert.initStyle(StageStyle.UTILITY);
-                alert.setHeaderText(null);
-                alert.showAndWait();
-            }            
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("There was an error, namely: " + e.getMessage());
+
+    public void loginButton(String username, String password, boolean newUser) {
+        if (!newUser) {
+            //Verifies login data. Cast as binary makes password case-sensative.
+            String queryString = "SELECT * FROM user WHERE userName = ? AND "
+                    + "CAST(password AS BINARY) = ?;";
+
+            try (Connection conn = DatabaseHelper.getConnection();
+                    PreparedStatement statement = conn.prepareStatement(queryString);) {
+                statement.setString(1, username);
+                statement.setString(2, password);
+
+                resultSet = statement.executeQuery();
+
+                //If any result is returned, username & password match
+                if (resultSet.next()) {
+                    currentUserName = username;
+                    openDashboard();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR,
+                            "Invalid username or password."
+                            + "\nIf you're a first time user, please enter your "
+                            + "desired username & password, then click register.");
+                    alert.initStyle(StageStyle.UTILITY);
+                    alert.setHeaderText(null);
+                    alert.showAndWait();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            //Eliminates re-querying the database for credentials after registering
+            currentUserName = username;
+            openDashboard();
         }
     }
-    
+
     public void openDashboard() {
-         try {
+        try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(C195ProjectWendler.class.getResource("View_Controller/DashboardPage.fxml"));
             Parent root = loader.load();
             DashboardPageController controller = loader.getController();
             controller.setMainApp(this);
             controller.setUserNameLabel(currentUserName);
-            
+
             controller.setStage(primaryStage);
-            
+
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("There was an error, namely: " + e.getMessage());
         }
     }
-    
+
     public void dashOpenAppointmentsButton() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -108,17 +114,16 @@ public class C195ProjectWendler extends Application {
             Parent root = loader.load();
             AppointmentsPageController controller = loader.getController();
             controller.setMainApp(this);
-            
+
             controller.setStage(primaryStage);
-            
+
             primaryStage.setScene(new Scene(root));
-            primaryStage.show();            
+            primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("There was an error, namely: " + e.getMessage());            
         }
     }
-    
+
     public void dashOpenCustomersButton() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -126,17 +131,16 @@ public class C195ProjectWendler extends Application {
             Parent root = loader.load();
             CustomerPageController controller = loader.getController();
             controller.setMainApp(this);
-            
+
             controller.setStage(primaryStage);
-            
+
             primaryStage.setScene(new Scene(root));
-            primaryStage.show();            
+            primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("There was an error, namely: " + e.getMessage());            
         }
     }
-    
+
     public void dashOpenCalendarButton() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -144,17 +148,16 @@ public class C195ProjectWendler extends Application {
             Parent root = loader.load();
             CalendarPageController controller = loader.getController();
             controller.setMainApp(this);
-            
+
             controller.setStage(primaryStage);
-            
+
             primaryStage.setScene(new Scene(root));
-            primaryStage.show();            
+            primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("There was an error, namely: " + e.getMessage());            
         }
     }
-    
+
     public void dashOpenReportsButton() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -162,15 +165,18 @@ public class C195ProjectWendler extends Application {
             Parent root = loader.load();
             ReportsPageController controller = loader.getController();
             controller.setMainApp(this);
-            
+
             controller.setStage(primaryStage);
-            
+
             primaryStage.setScene(new Scene(root));
-            primaryStage.show();            
+            primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("There was an error, namely: " + e.getMessage());            
         }
+    }
+
+    public String getCurrentUserName() {
+        return currentUserName;
     }
 
     /**
