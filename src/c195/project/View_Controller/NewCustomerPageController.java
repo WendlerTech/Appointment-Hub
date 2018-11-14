@@ -98,6 +98,7 @@ public class NewCustomerPageController implements Initializable {
                 "USA", "England");
 
         cmbNewCustCountry.setItems(countryList);
+        CustomerPageController.setDataWasUpdated(false);
     }
 
     public void setStage(Stage stage, String currentUser) {
@@ -118,12 +119,9 @@ public class NewCustomerPageController implements Initializable {
         boolean isActive = chkNewCustActive.isSelected();
 
         if (custName.length() > 0 && address1.length() > 0
-                && zipCode.length() > 0 && phoneNum.length() > 0 
+                && zipCode.length() > 0 && phoneNum.length() > 0
                 && cmbNewCustCity.getValue() != null) {
-            int cityID = 0;
-            if (cmbNewCustCity.getValue() != null) {
-                cityID = DatabaseHelper.getCityID(cmbNewCustCity.getValue());
-            }
+            int cityID = DatabaseHelper.getCityID(cmbNewCustCity.getValue());
 
             custAddress.setCityID(cityID);
             custAddress.setAddress(address1);
@@ -146,11 +144,12 @@ public class NewCustomerPageController implements Initializable {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, 
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,
                     "Customer successfully added.");
             alert.initStyle(StageStyle.UTILITY);
             alert.setHeaderText(null);
             alert.showAndWait();
+            CustomerPageController.setDataWasUpdated(true);
             currentStage.close();
         } else {
             showErrorAlert("Please fill out all fields.");
@@ -160,6 +159,7 @@ public class NewCustomerPageController implements Initializable {
     @FXML
     void cancelNewCustButtonHandler(ActionEvent event) {
         //Closes window
+        CustomerPageController.setDataWasUpdated(false);
         currentStage.close();
     }
 
@@ -201,8 +201,8 @@ public class NewCustomerPageController implements Initializable {
         }
     }
 
+    //Shows an alert pop-up with no icon or header text
     public void showErrorAlert(String message) {
-        //Shows an alert pop-up with no icon or header text
         Alert alert = new Alert(Alert.AlertType.ERROR, message);
         alert.initStyle(StageStyle.UTILITY);
         alert.setHeaderText(null);
