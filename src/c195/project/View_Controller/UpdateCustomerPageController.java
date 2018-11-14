@@ -152,15 +152,11 @@ public class UpdateCustomerPageController implements Initializable {
             address.setAddress2(address2);
             address.setZipCode(zipCode);
             address.setPhoneNumber(phoneNum);
-            address.setCreatedBy(currentUser);
             address.setLastUpdatedBy(currentUser);
-            address.setCreateDate(DatabaseHelper.getCurrentDate());
             address.setLastUpdated(DatabaseHelper.getCurrentDate());
             customer.setCustName(custName);
             customer.setIsActive(isActive);
-            customer.setCreateDate(DatabaseHelper.getCurrentDate());
             customer.setLastUpdate(DatabaseHelper.getCurrentDate());
-            customer.setCreatedBy(currentUser);
             customer.setLastUpdatedBy(currentUser);
 
             try {
