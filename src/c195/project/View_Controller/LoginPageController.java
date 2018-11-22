@@ -2,6 +2,7 @@ package c195.project.View_Controller;
 
 import c195.project.C195ProjectWendler;
 import c195.project.DatabaseHelper;
+import c195.project.User;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -39,6 +40,7 @@ public class LoginPageController implements Initializable {
 
     private C195ProjectWendler mainApp;
     private Stage currentStage;
+    private User user;
     private String username, password;
     private String newUsername, newPassword;
 
@@ -65,7 +67,14 @@ public class LoginPageController implements Initializable {
                     + "desired username & password, then click register.");
         } else {
             if (matchRegex(username)) {
-                mainApp.loginButton(username, password, false);
+                user = DatabaseHelper.userLogin(username, password);
+                if (user != null) {
+                    mainApp.loginButton(user);
+                } else {
+                    showErrorAlert("Invalid username or password."
+                            + "\nIf you're a first time user, please enter your "
+                            + "desired username & password, then click register.");
+                }
             } else {
                 showErrorAlert("Invalid character in username.");
             }
@@ -100,8 +109,13 @@ public class LoginPageController implements Initializable {
                         alert.showAndWait();
 
                         if (alert.getResult() == ButtonType.YES) {
-                            DatabaseHelper.addNewUser(newUsername, newPassword);
-                            mainApp.loginButton(newUsername, newPassword, true);
+                            user = DatabaseHelper.addNewUser(newUsername, newPassword);
+                            if (user != null) {
+                                mainApp.loginButton(user);
+                            } else {
+                                showErrorAlert("There was a problem saving data."
+                                        + "\nPlease try again.");
+                            }
                         }
                     } else {
                         showErrorAlert("Username is already taken.");

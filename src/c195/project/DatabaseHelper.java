@@ -60,18 +60,38 @@ public class DatabaseHelper {
     private static final String CUST_COL6 = "lastUpdate";
     private static final String CUST_COL7 = "lastUpdateBy";
 
+    //Appointment table
+    private static final String TBL_APPT = "appointment";
+    private static final String APPT_COL0 = "appointmentId";
+    private static final String APPT_COL1 = "customerId";
+    private static final String APPT_COL2 = "userId";
+    private static final String APPT_COL3 = "title";
+    private static final String APPT_COL4 = "description";
+    private static final String APPT_COL5 = "location";
+    private static final String APPT_COL6 = "contact";
+    private static final String APPT_COL7 = "type";
+    private static final String APPT_COL8 = "url";
+    private static final String APPT_COL9 = "start";
+    private static final String APPT_COL10 = "end";
+    private static final String APPT_COL11 = "createDate";
+    private static final String APPT_COL12 = "createdBy";
+    private static final String APPT_COL13 = "lastUpdate";
+    private static final String APPT_COL14 = "lastUpdateBy";
+
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
     }
 
-    public static void addNewUser(String username, String password) throws SQLException {
+    public static User addNewUser(String username, String password) throws SQLException {
+        User newUser = null;
         String queryString = "INSERT INTO " + TBL_USER
                 + " (" + USER_COL1 + ", " + USER_COL2 + ", " + USER_COL3 + ", " + USER_COL4
                 + ", " + USER_COL5 + ", " + USER_COL6 + ", " + USER_COL7 + ") "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?);";
 
         try (Connection conn = getConnection();
-                PreparedStatement statement = conn.prepareStatement(queryString);) {
+                PreparedStatement statement = conn.prepareStatement(queryString,
+                        Statement.RETURN_GENERATED_KEYS);) {
             statement.setString(1, username);
             statement.setString(2, password);
             statement.setString(3, "1");
@@ -80,8 +100,44 @@ public class DatabaseHelper {
             statement.setString(6, getCurrentDate());
             statement.setString(7, username);
 
-            statement.execute();
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                newUser = new User();
+                newUser.setUserName(username);
+                newUser.setPassword(password);
+                try (ResultSet generatedKey = statement.getGeneratedKeys()) {
+                    newUser.setUserID(generatedKey.getInt(1));
+                }
+                return newUser;
+            }
         }
+        return newUser;
+    }
+
+    public static User userLogin(String username, String password) {
+        User loggedInUser = null;
+        //Verifies login data. Cast as binary makes password case-sensative.
+        String queryString = "SELECT * FROM user WHERE userName = ? AND "
+                + "CAST(password AS BINARY) = ?;";
+
+        try (Connection conn = DatabaseHelper.getConnection();
+                PreparedStatement statement = conn.prepareStatement(queryString);) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                loggedInUser = new User();
+                loggedInUser.setUserName(username);
+                loggedInUser.setPassword(password);
+                loggedInUser.setUserID(resultSet.getInt("userId"));
+
+                return loggedInUser;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return loggedInUser;
     }
 
     public static void addNewCustomer(Customer cust, Address address) throws SQLException {
@@ -291,6 +347,40 @@ public class DatabaseHelper {
         return addr;
     }
 
+    public static boolean addNewAppointment(Appointment appt) throws SQLException {
+        String queryString = "INSERT INTO " + TBL_APPT + " (" + APPT_COL1
+                + ", " + APPT_COL2 + ", " + APPT_COL3 + ", " + APPT_COL4
+                + ", " + APPT_COL5 + ", " + APPT_COL6 + ", " + APPT_COL7
+                + ", " + APPT_COL8 + ", " + APPT_COL9 + ", " + APPT_COL10
+                + ", " + APPT_COL11 + ", " + APPT_COL12 + ", " + APPT_COL13
+                + ", " + APPT_COL14 + ") VALUES "
+                + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+        try (Connection conn = getConnection();
+                PreparedStatement statement = conn.prepareStatement(
+                        queryString);) {
+            statement.setInt(1, appt.getCustomerID());
+            statement.setInt(2, appt.getUserID());
+            statement.setString(3, appt.getTitle());
+            statement.setString(4, appt.getDescription());
+            statement.setString(5, appt.getLocation());
+            statement.setString(6, appt.getContact());
+            statement.setString(7, appt.getType());
+            statement.setString(8, appt.getUrl());
+            statement.setString(9, appt.getStartTime());
+            statement.setString(10, appt.getEndTime());
+            statement.setString(11, appt.getCreateDate());
+            statement.setString(12, appt.getCreatedBy());
+            statement.setString(13, appt.getLastUpdate());
+            statement.setString(14, appt.getLastUpdateBy());
+
+            int affectedRows = statement.executeUpdate();
+
+            return affectedRows != 0;
+
+        }
+    }
+
     public static ObservableList getCustomerList() throws SQLException {
         ObservableList<Customer> custList = FXCollections.observableArrayList();
         String queryString = "SELECT * FROM " + TBL_CUST;
@@ -345,6 +435,41 @@ public class DatabaseHelper {
             }
         }
         return addressList;
+    }
+
+    public static ObservableList getAppointmentList() throws SQLException {
+        ObservableList<Appointment> apptList = FXCollections.observableArrayList();
+        String queryString = "SELECT * FROM " + TBL_APPT;
+        ResultSet result;
+        Appointment appt;
+
+        try (Connection conn = getConnection();
+                PreparedStatement statement = conn.prepareStatement(queryString);) {
+            result = statement.executeQuery();
+
+            while (result.next()) {
+                appt = new Appointment();
+                appt.setAppointmentID(result.getInt(APPT_COL0));
+                appt.setCustomerID(result.getInt(APPT_COL1));
+                appt.setUserID(result.getInt(APPT_COL2));
+                appt.setTitle(result.getString(APPT_COL3));
+                appt.setDescription(result.getString(APPT_COL4));
+                appt.setLocation(result.getString(APPT_COL5));
+                appt.setContact(result.getString(APPT_COL6));
+                appt.setType(result.getString(APPT_COL7));
+                appt.setUrl(result.getString(APPT_COL8));
+                appt.setStartTime(result.getString(APPT_COL9));
+                appt.setEndTime(result.getString(APPT_COL10));
+                appt.setCreateDate(result.getString(APPT_COL11));
+                appt.setCreatedBy(result.getString(APPT_COL12));
+                appt.setLastUpdate(result.getString(APPT_COL13));
+                appt.setLastUpdateBy(result.getString(APPT_COL14));
+
+                apptList.add(appt);
+            }
+        }
+
+        return apptList;
     }
 
     //Returns true if username has already been registered

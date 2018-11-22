@@ -1,5 +1,6 @@
 package c195.project.View_Controller;
 
+import c195.project.C195ProjectWendler;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -10,6 +11,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -49,12 +51,22 @@ public class ViewUpdateAppointmentPageController implements Initializable {
     @FXML
     private Button btnViewApptViewCust;
 
+    private C195ProjectWendler mainApp;
+    private Stage currentStage;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }
+
+    public void setStage(Stage stage) {
+        currentStage = stage;
+    }
+
+    public void setMainApp(C195ProjectWendler mainApp) {
+        this.mainApp = mainApp;
+    }
 }

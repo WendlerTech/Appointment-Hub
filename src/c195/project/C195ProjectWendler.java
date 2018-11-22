@@ -6,19 +6,18 @@ import c195.project.View_Controller.CustomerPageController;
 import c195.project.View_Controller.DashboardPageController;
 import c195.project.View_Controller.LoginPageController;
 import c195.project.View_Controller.ReportsPageController;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  *
@@ -27,9 +26,8 @@ import javafx.stage.StageStyle;
 public class C195ProjectWendler extends Application {
 
     private Stage primaryStage;
-    private String currentUserName = "";
-
-    private ResultSet resultSet = null;
+    private User currentUser = null;
+    final private String appointmentUrl = "https://wendler.tech/";
 
     public C195ProjectWendler() {
 
@@ -53,39 +51,20 @@ public class C195ProjectWendler extends Application {
         primaryStage.show();
     }
 
-    public void loginButton(String username, String password, boolean newUser) {
-        if (!newUser) {
-            //Verifies login data. Cast as binary makes password case-sensative.
-            String queryString = "SELECT * FROM user WHERE userName = ? AND "
-                    + "CAST(password AS BINARY) = ?;";
+    public void loginButton(User user) {
+        currentUser = user;
+        recordUserLogin();
+        openDashboard();
+    }
 
-            try (Connection conn = DatabaseHelper.getConnection();
-                    PreparedStatement statement = conn.prepareStatement(queryString);) {
-                statement.setString(1, username);
-                statement.setString(2, password);
-
-                resultSet = statement.executeQuery();
-
-                //If any result is returned, username & password match
-                if (resultSet.next()) {
-                    currentUserName = username;
-                    openDashboard();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR,
-                            "Invalid username or password."
-                            + "\nIf you're a first time user, please enter your "
-                            + "desired username & password, then click register.");
-                    alert.initStyle(StageStyle.UTILITY);
-                    alert.setHeaderText(null);
-                    alert.showAndWait();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            //Eliminates re-querying the database for credentials after registering
-            currentUserName = username;
-            openDashboard();
+    private void recordUserLogin() {
+        try (FileWriter fileWriter = new FileWriter("user_logins.txt", true);
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
+            printWriter.println("[" + DatabaseHelper.getCurrentDate()
+                    + "] - " + currentUser.getUserName());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -96,7 +75,7 @@ public class C195ProjectWendler extends Application {
             Parent root = loader.load();
             DashboardPageController controller = loader.getController();
             controller.setMainApp(this);
-            controller.setUserNameLabel(currentUserName);
+            controller.setUserNameLabel(currentUser.getUserName());
 
             controller.setStage(primaryStage);
 
@@ -176,7 +155,15 @@ public class C195ProjectWendler extends Application {
     }
 
     public String getCurrentUserName() {
-        return currentUserName;
+        return currentUser.getUserName();
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+    
+    public String getUrl() {
+        return appointmentUrl;
     }
 
     /**
@@ -185,5 +172,4 @@ public class C195ProjectWendler extends Application {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         launch(args);
     }
-
 }
