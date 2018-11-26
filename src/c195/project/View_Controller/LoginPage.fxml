@@ -14,12 +14,12 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="356.0" prefWidth="518.0" style="-fx-background-color: lightgrey;" VBox.vgrow="ALWAYS">
       <children>
-            <Label fx:id="lblLoginUsername" layoutX="227.0" layoutY="187.0" text="Username:" AnchorPane.leftAnchor="227.0" AnchorPane.rightAnchor="510.0" AnchorPane.topAnchor="187.0">
+            <Label fx:id="lblLoginUsername" layoutX="227.0" layoutY="187.0" text="Username:" AnchorPane.leftAnchor="227.0" AnchorPane.topAnchor="187.0">
                <font>
                   <Font name="Calibri Light" size="22.0" />
                </font>
             </Label>
-            <Label fx:id="lblLoginPassword" layoutX="227.0" layoutY="266.0" text="Password:" AnchorPane.leftAnchor="227.0" AnchorPane.rightAnchor="488.0" AnchorPane.topAnchor="266.0">
+            <Label fx:id="lblLoginPassword" layoutX="227.0" layoutY="266.0" text="Password:" AnchorPane.leftAnchor="227.0" AnchorPane.topAnchor="266.0">
                <font>
                   <Font name="Calibri Light" size="22.0" />
                </font>

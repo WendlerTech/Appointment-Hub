@@ -42,7 +42,7 @@
                   <Font name="Calibri Light" size="20.0" />
                </font>
             </Button>
-            <Label layoutX="127.0" layoutY="220.0" text="View, update or delete appointments">
+            <Label layoutX="127.0" layoutY="220.0" text="View, update or delete appointments" AnchorPane.leftAnchor="127.0">
                <font>
                   <Font name="Calibri Light" size="16.0" />
                </font>
@@ -52,7 +52,7 @@
                   <Font name="Calibri Light" size="16.0" />
                </font>
             </Label>
-            <Label layoutX="125.0" layoutY="368.0" text="View appointments by week or month">
+            <Label layoutX="125.0" layoutY="368.0" text="View appointments by week or month" AnchorPane.leftAnchor="125.0">
                <font>
                   <Font name="Calibri Light" size="16.0" />
                </font>

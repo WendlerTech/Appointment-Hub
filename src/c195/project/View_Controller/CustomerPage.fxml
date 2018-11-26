@@ -45,7 +45,7 @@
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="btnCustDelete" layoutX="24.0" layoutY="397.0" mnemonicParsing="false" onAction="#deleteCustomerButtonHandler" prefHeight="34.0" prefWidth="78.0" text="Delete" textFill="RED" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="397.0">
+            <Button fx:id="btnCustDelete" layoutX="24.0" layoutY="397.0" mnemonicParsing="false" onAction="#deleteCustomerButtonHandler" prefHeight="34.0" prefWidth="78.0" text="Delete" textFill="RED" AnchorPane.leftAnchor="24.0">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>

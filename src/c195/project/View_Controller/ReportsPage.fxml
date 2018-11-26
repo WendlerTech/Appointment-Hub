@@ -25,7 +25,7 @@
                   <Font name="Calibri Light" size="22.0" />
                </font>
             </Label>
-            <ComboBox fx:id="cmbAvailableReports" layoutX="202.0" layoutY="107.0" onAction="#reportsComboBoxEventHandler" prefHeight="30.0" prefWidth="240.0" />
+            <ComboBox fx:id="cmbAvailableReports" layoutX="202.0" layoutY="107.0" onAction="#reportsComboBoxEventHandler" prefHeight="30.0" prefWidth="240.0" AnchorPane.leftAnchor="202.0" />
             <TableView fx:id="tblReports" layoutX="33.0" layoutY="145.0" prefHeight="293.0" prefWidth="771.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="52.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="145.0">
               <columns>
                 <TableColumn prefWidth="75.0" text="Report Column 1" />

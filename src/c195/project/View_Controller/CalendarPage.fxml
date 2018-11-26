@@ -33,18 +33,18 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <RadioButton fx:id="radApptSortWeek" layoutX="27.0" layoutY="145.0" mnemonicParsing="false" selected="true" text="Week">
+            <RadioButton fx:id="radApptSortWeek" layoutX="27.0" layoutY="145.0" mnemonicParsing="false" selected="true" text="Week" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="145.0">
                <toggleGroup>
                   <ToggleGroup fx:id="grpSortApptBy" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="radApptSortMonth" layoutX="27.0" layoutY="174.0" mnemonicParsing="false" text="Month" toggleGroup="$grpSortApptBy" />
+            <RadioButton fx:id="radApptSortMonth" layoutX="27.0" layoutY="174.0" mnemonicParsing="false" text="Month" toggleGroup="$grpSortApptBy" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="174.0" />
             <Label layoutX="27.0" layoutY="108.0" text="Sort by:" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="108.0">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="131.0" layoutY="80.0" text="Appointments">
+            <Label layoutX="131.0" layoutY="80.0" text="Appointments" AnchorPane.leftAnchor="131.0">
                <font>
                   <Font name="Calibri Light" size="24.0" />
                </font>

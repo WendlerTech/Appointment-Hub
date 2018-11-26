@@ -15,7 +15,7 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <Label layoutX="112.0" layoutY="37.0" text="View/Update Appointment" AnchorPane.leftAnchor="112.0" AnchorPane.rightAnchor="111.0">
+            <Label layoutX="112.0" layoutY="37.0" text="View/Update Appointment" AnchorPane.leftAnchor="112.0">
                <font>
                   <Font name="Calibri" size="26.0" />
                </font>
@@ -55,10 +55,10 @@
                   <Font name="Calibri Light" size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtViewApptTitle" layoutX="256.0" layoutY="112.0" AnchorPane.rightAnchor="79.0" />
+            <TextField fx:id="txtViewApptTitle" layoutX="256.0" layoutY="112.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
             <ComboBox fx:id="cmbViewApptType" layoutX="256.0" layoutY="152.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
-            <TextField fx:id="txtViewApptCustomer" layoutX="256.0" layoutY="192.0" AnchorPane.rightAnchor="79.0" />
-            <TextField fx:id="txtViewApptContact" layoutX="256.0" layoutY="232.0" AnchorPane.rightAnchor="79.0" />
+            <TextField fx:id="txtViewApptCustomer" layoutX="256.0" layoutY="192.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
+            <TextField fx:id="txtViewApptContact" layoutX="256.0" layoutY="232.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
             <DatePicker fx:id="dateViewAppt" layoutX="256.0" layoutY="272.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
             <ChoiceBox fx:id="cmbViewApptHrStart" layoutX="255.0" layoutY="312.0" prefHeight="30.0" prefWidth="85.0" AnchorPane.rightAnchor="170.0" />
             <ChoiceBox fx:id="cmbViewApptMinStart" layoutX="346.0" layoutY="312.0" prefHeight="30.0" prefWidth="85.0" AnchorPane.rightAnchor="79.0" />
@@ -66,7 +66,7 @@
             <ChoiceBox fx:id="cmbViewApptMinEnd" layoutX="345.0" layoutY="352.0" prefHeight="30.0" prefWidth="85.0" AnchorPane.rightAnchor="79.0" />
             <ChoiceBox fx:id="cmbViewApptLocation" layoutX="256.0" layoutY="392.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
             <TextArea fx:id="txtViewApptDescription" layoutX="256.0" layoutY="435.0" prefHeight="93.0" prefWidth="175.0" wrapText="true" AnchorPane.rightAnchor="79.0" />
-            <Button fx:id="btnSaveViewAppt" layoutX="176.0" layoutY="541.0" mnemonicParsing="false" text="Save Appointment" AnchorPane.leftAnchor="176.0" AnchorPane.rightAnchor="176.0">
+            <Button fx:id="btnSaveViewAppt" layoutX="176.0" layoutY="541.0" mnemonicParsing="false" text="Save Appointment" AnchorPane.leftAnchor="176.0">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
