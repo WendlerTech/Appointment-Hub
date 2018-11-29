@@ -10,12 +10,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -94,6 +99,9 @@ public class NewAppointmentPageController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -103,8 +111,8 @@ public class NewAppointmentPageController implements Initializable {
                 "Consultation", "Accounting", "Sales", "Support");
         try {
             custList = DatabaseHelper.getCustomerList();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            Logger.getLogger(NewAppointmentPageController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         cmbNewApptCust.setItems(custList);
@@ -194,8 +202,8 @@ public class NewAppointmentPageController implements Initializable {
                 stage.setScene(new Scene(root));
                 stage.setTitle("View or update an existing customer");
                 stage.showAndWait();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                Logger.getLogger(NewAppointmentPageController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -236,8 +244,8 @@ public class NewAppointmentPageController implements Initializable {
                 firstLoad = false;
                 try {
                     addrList = DatabaseHelper.getAddressList();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                } catch (SQLException ex) {
+                    Logger.getLogger(NewAppointmentPageController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             for (Address addr : addrList) {
@@ -254,7 +262,6 @@ public class NewAppointmentPageController implements Initializable {
 
     @FXML
     void saveNewAppointmentButtonHandler(ActionEvent event) throws SQLException {
-
         if (customer != null && cmbNewApptHrStart.getValue() != null
                 && cmbNewApptMinStart.getValue() != null
                 && cmbNewApptHrEnd.getValue() != null
@@ -281,16 +288,18 @@ public class NewAppointmentPageController implements Initializable {
             appointment.setLastUpdate(DatabaseHelper.getCurrentDate());
             appointment.setLastUpdateBy(mainApp.getCurrentUserName());
 
-            if (DatabaseHelper.addNewAppointment(appointment)) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                        "Appointment saved successfully.");
-                alert.initStyle(StageStyle.UTILITY);
-                alert.setHeaderText(null);
-                alert.showAndWait();
-                AppointmentsPageController.setDataWasUpdated(true);
-                currentStage.close();
-            } else {
-                showErrorAlert("Error while saving appointment.");
+            if (!checkForScheduleConflicts()) {
+                if (DatabaseHelper.addNewAppointment(appointment)) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                            "Appointment saved successfully.");
+                    alert.initStyle(StageStyle.UTILITY);
+                    alert.setHeaderText(null);
+                    alert.showAndWait();
+                    AppointmentsPageController.setDataWasUpdated(true);
+                    currentStage.close();
+                } else {
+                    showErrorAlert("Error while saving appointment.");
+                }
             }
         } else {
             showErrorAlert("Please fill in all appropriate fields.");
@@ -335,12 +344,105 @@ public class NewAppointmentPageController implements Initializable {
         return format.format(dateToFormat);
     }
 
+    private boolean checkForScheduleConflicts() {
+        ObservableList<Appointment> apptList = AppointmentsPageController.getApptList();
+        LocalDate selectedDay = dateNewAppt.getValue();
+        LocalDate startDayToCompare;
+        LocalDateTime startTimeToCompare, endTimeToCompare,
+                selectedStartTime, selectedEndTime;
+        DateFormat formatDay = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat formatFullDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zdt;
+        for (Appointment appt : apptList) {
+            if (appt.getUserID() == mainApp.getCurrentUser().getUserID()) {
+                //Date object is created using appointment start time
+                try {
+                    date = formatDay.parse(appt.getStartTime());
+                } catch (ParseException ex) {
+                    Logger.getLogger(NewAppointmentPageController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                //Parses date into LocalDate
+                Instant instant = date.toInstant();
+                zdt = ZonedDateTime.ofInstant(instant, zoneId);
+                startDayToCompare = LocalDate.from(zdt);
+
+                //If the new appointment falls on the same day as an existing one
+                if (startDayToCompare.isEqual(selectedDay)) {
+                    //-----Handles startTimeToCompare-----
+                    try {
+                        date = formatFullDate.parse(appt.getStartTime());
+                    } catch (ParseException ex) {
+                        Logger.getLogger(NewAppointmentPageController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    instant = date.toInstant();
+                    zdt = ZonedDateTime.ofInstant(instant, zoneId);
+                    startTimeToCompare = LocalDateTime.from(zdt);
+
+                    //-----Handles endTimeToCompare-----
+                    try {
+                        date = formatFullDate.parse(appt.getEndTime());
+                    } catch (ParseException ex) {
+                        Logger.getLogger(NewAppointmentPageController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    instant = date.toInstant();
+                    zdt = ZonedDateTime.ofInstant(instant, zoneId);
+                    endTimeToCompare = LocalDateTime.from(zdt);
+
+                    //-----Handles selectedStartTime-----
+                    try {
+                        date = formatFullDate.parse(getApptStartTime());
+                    } catch (ParseException ex) {
+                        Logger.getLogger(NewAppointmentPageController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    instant = date.toInstant();
+                    zdt = ZonedDateTime.ofInstant(instant, zoneId);
+                    selectedStartTime = LocalDateTime.from(zdt);
+
+                    //-----Handles selectedEndTime-----
+                    try {
+                        date = formatFullDate.parse(getApptEndTime());
+                    } catch (ParseException ex) {
+                        Logger.getLogger(NewAppointmentPageController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    instant = date.toInstant();
+                    zdt = ZonedDateTime.ofInstant(instant, zoneId);
+                    selectedEndTime = LocalDateTime.from(zdt);
+
+                    if (selectedStartTime.isEqual(startTimeToCompare) || selectedEndTime.isEqual(endTimeToCompare)
+                            || selectedStartTime.isAfter(startTimeToCompare) && selectedStartTime.isBefore(endTimeToCompare)
+                            || selectedEndTime.isAfter(startTimeToCompare) && selectedEndTime.isBefore(endTimeToCompare)
+                            || selectedStartTime.isBefore(startTimeToCompare) && selectedEndTime.isAfter(endTimeToCompare)) {
+                        //Conflicting appointment times found
+                        showErrorAlert(capitalizeFirstLetter(mainApp.getCurrentUserName()) + ", you already have an appointment titled \""
+                                + appt.getTitle() + "\" scheduled within your selected time."
+                                + "\nPlease select another time or delete the other appointment.");
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     //Shows an alert pop-up with no icon or header text
     public void showErrorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR, message);
         alert.initStyle(StageStyle.UTILITY);
         alert.setHeaderText(null);
         alert.showAndWait();
+    }
+
+    public String capitalizeFirstLetter(String original) {
+        //Capitalizes first letter of a string       
+        if (original == null || original.length() == 0) {
+            return original;
+        } else {
+            original = original.toLowerCase();
+            return original.substring(0, 1).toUpperCase() + original.substring(1);
+        }
     }
 
     public void setMainApp(C195ProjectWendler mainApp) {

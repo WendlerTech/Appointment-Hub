@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -134,8 +136,8 @@ public class DatabaseHelper {
 
                 return loggedInUser;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
         return loggedInUser;
     }
@@ -347,6 +349,41 @@ public class DatabaseHelper {
         return addr;
     }
 
+    public static Appointment getAppointment(int appointmentId) {
+        Appointment appt = null;
+        ResultSet result;
+        String queryString = "SELECT * FROM " + TBL_APPT + " WHERE " + APPT_COL0
+                + " = ?;";
+
+        try (Connection conn = getConnection();
+                PreparedStatement statement = conn.prepareStatement(queryString);) {
+            statement.setInt(1, appointmentId);
+            result = statement.executeQuery();
+
+            while (result.next()) {
+                appt = new Appointment();
+                appt.setAppointmentID(result.getInt(APPT_COL0));
+                appt.setCustomerID(result.getInt(APPT_COL1));
+                appt.setUserID(result.getInt(APPT_COL2));
+                appt.setTitle(result.getString(APPT_COL3));
+                appt.setDescription(result.getString(APPT_COL4));
+                appt.setLocation(result.getString(APPT_COL5));
+                appt.setContact(result.getString(APPT_COL6));
+                appt.setType(result.getString(APPT_COL7));
+                appt.setUrl(result.getString(APPT_COL8));
+                appt.setStartTime(result.getString(APPT_COL9));
+                appt.setEndTime(result.getString(APPT_COL10));
+                appt.setCreateDate(result.getString(APPT_COL11));
+                appt.setCreatedBy(result.getString(APPT_COL12));
+                appt.setLastUpdate(result.getString(APPT_COL13));
+                appt.setLastUpdateBy(result.getString(APPT_COL14));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return appt;
+    }
+
     public static boolean addNewAppointment(Appointment appt) throws SQLException {
         String queryString = "INSERT INTO " + TBL_APPT + " (" + APPT_COL1
                 + ", " + APPT_COL2 + ", " + APPT_COL3 + ", " + APPT_COL4
@@ -377,7 +414,55 @@ public class DatabaseHelper {
             int affectedRows = statement.executeUpdate();
 
             return affectedRows != 0;
+        }
+    }
 
+    public static boolean updateAppointment(Appointment appt) throws SQLException {
+        String queryString = "UPDATE " + TBL_APPT + " SET " + APPT_COL1
+                + " = ?, " + APPT_COL2 + " = ?, " + APPT_COL3 + " = ?, "
+                + APPT_COL4 + " = ?, " + APPT_COL5 + " = ?, "
+                + APPT_COL6 + " = ?, " + APPT_COL7 + " = ?, "
+                + APPT_COL8 + " = ?, " + APPT_COL9 + " = ?, "
+                + APPT_COL10 + " = ?, " + APPT_COL11 + " = ?, "
+                + APPT_COL12 + " = ?, " + APPT_COL13 + " = ?, "
+                + APPT_COL14 + " = ? " + " WHERE " + APPT_COL0
+                + " = ?;";
+
+        try (Connection conn = getConnection();
+                PreparedStatement statement = conn.prepareStatement(queryString);) {
+            statement.setInt(1, appt.getCustomerID());
+            statement.setInt(2, appt.getUserID());
+            statement.setString(3, appt.getTitle());
+            statement.setString(4, appt.getDescription());
+            statement.setString(5, appt.getLocation());
+            statement.setString(6, appt.getContact());
+            statement.setString(7, appt.getType());
+            statement.setString(8, appt.getUrl());
+            statement.setString(9, appt.getStartTime());
+            statement.setString(10, appt.getEndTime());
+            statement.setString(11, appt.getCreateDate());
+            statement.setString(12, appt.getCreatedBy());
+            statement.setString(13, appt.getLastUpdate());
+            statement.setString(14, appt.getLastUpdateBy());
+            statement.setInt(15, appt.getAppointmentID());
+
+            int affectedRows = statement.executeUpdate();
+
+            return affectedRows != 0;
+        }
+    }
+
+    public static boolean deleteAppointment(int appointmentId) throws SQLException {
+        String queryString = "DELETE FROM " + TBL_APPT + " WHERE " + APPT_COL0
+                + " = ?;";
+
+        try (Connection conn = getConnection();
+                PreparedStatement statement = conn.prepareStatement(queryString);) {
+            statement.setInt(1, appointmentId);
+
+            int affectedRows = statement.executeUpdate();
+
+            return affectedRows != 0;
         }
     }
 
@@ -468,7 +553,6 @@ public class DatabaseHelper {
                 apptList.add(appt);
             }
         }
-
         return apptList;
     }
 

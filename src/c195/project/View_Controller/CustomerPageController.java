@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -65,13 +67,16 @@ public class CustomerPageController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             populateTableData();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerPageController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -143,8 +148,8 @@ public class CustomerPageController implements Initializable {
             stage.setTitle("Add a new customer");
             stage.showAndWait();
             refreshTable();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(CustomerPageController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -157,10 +162,24 @@ public class CustomerPageController implements Initializable {
                 Parent root = loader.load();
                 UpdateCustomerPageController controller = loader.getController();
 
-                //Turns selected item into an object, then uses the IDs to create new objects from database class
+                //Turns selected item into an object
                 CustomerTableRow selectedCustomer = tblViewCustomers.getSelectionModel().getSelectedItem();
-                Customer customerToUpdate = DatabaseHelper.getCustomer(selectedCustomer.getCustId());
-                Address addrToUpdate = DatabaseHelper.getAddress(selectedCustomer.getAddressId());
+                Customer customerToUpdate = null;
+                Address addrToUpdate = null;
+
+                //Searches pre-queried lists for selected cust, optimizing load time
+                for (Customer cust : custList) {
+                    if (cust.getCustID() == selectedCustomer.getCustId()) {
+                        customerToUpdate = cust;
+                        break;
+                    }
+                }
+                for (Address addr : addrList) {
+                    if (addr.getAddressID() == selectedCustomer.getAddressId()) {
+                        addrToUpdate = addr;
+                        break;
+                    }
+                }
 
                 //Passes newly created (& populated) objects to update customer page
                 Stage stage = new Stage();
@@ -172,8 +191,8 @@ public class CustomerPageController implements Initializable {
                 stage.setTitle("View or update an existing customer");
                 stage.showAndWait();
                 refreshTable();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                Logger.getLogger(CustomerPageController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -185,8 +204,8 @@ public class CustomerPageController implements Initializable {
                 tblViewCustomers.getItems().clear();
                 populateTableData();
                 dataWasUpdated = false;
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException ex) {
+                Logger.getLogger(CustomerPageController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

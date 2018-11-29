@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,13 +18,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -42,13 +45,7 @@ public class AppointmentsPageController implements Initializable {
     @FXML
     private TableColumn<Appointment, String> colApptLocation;
     @FXML
-    private TableColumn<Appointment, String> colApptDate;
-    @FXML
-    private RadioButton radApptSortWeek;
-    @FXML
-    private ToggleGroup grpSortApptBy;
-    @FXML
-    private RadioButton radApptSortMonth;
+    private TableColumn<Appointment, String> colApptConsultant;
     @FXML
     private Button btnApptDelete;
     @FXML
@@ -60,19 +57,22 @@ public class AppointmentsPageController implements Initializable {
 
     private C195ProjectWendler mainApp;
     private Stage currentStage;
-    private ObservableList<Appointment> apptList = FXCollections.observableArrayList();
+    private static ObservableList<Appointment> apptList = FXCollections.observableArrayList();
 
     private static boolean dataWasUpdated = false;
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             populateTableData();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            Logger.getLogger(AppointmentsPageController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -93,7 +93,7 @@ public class AppointmentsPageController implements Initializable {
         colApptContact.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getContact()));
         colApptType.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getType()));
         colApptLocation.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLocation()));
-        colApptDate.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStartTime()));
+        colApptConsultant.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCreatedBy()));
     }
 
     @FXML
@@ -118,33 +118,66 @@ public class AppointmentsPageController implements Initializable {
             stage.setTitle("Add a new appointment");
             stage.showAndWait();
             refreshTable();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(AppointmentsPageController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
     void updateAppointmentButtonHandler(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(C195ProjectWendler.class.getResource("View_Controller/ViewUpdateAppointment.fxml"));
-            Parent root = loader.load();
-            ViewUpdateAppointmentPageController controller = loader.getController();
-            controller.setMainApp(mainApp);
+        if (tblViewAppointments.getSelectionModel().getSelectedItem() != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(C195ProjectWendler.class.getResource("View_Controller/ViewUpdateAppointmentPage.fxml"));
+                Parent root = loader.load();
+                ViewUpdateAppointmentPageController controller = loader.getController();
+                controller.setMainApp(mainApp);
 
-            Stage stage = new Stage();
-            controller.setStage(stage);
-            stage.getIcons().add(new Image(C195ProjectWendler.class.getResourceAsStream("View_Controller/Media/W Icon.png")));
+                Appointment apptToUpdate = null;
+                for (Appointment appt : apptList) {
+                    if (appt.getAppointmentID() == tblViewAppointments.getSelectionModel().getSelectedItem().getAppointmentID()) {
+                        apptToUpdate = appt;
+                    }
+                }
 
-            stage.setScene(new Scene(root));
-            stage.setTitle("View or update an existing appointment");
-            stage.showAndWait();
-            refreshTable();
-        } catch (IOException e) {
-            e.printStackTrace();
+                Stage stage = new Stage();
+                controller.setStage(stage, apptToUpdate, mainApp.getCurrentUser());
+                stage.getIcons().add(new Image(C195ProjectWendler.class.getResourceAsStream("View_Controller/Media/W Icon.png")));
+
+                stage.setScene(new Scene(root));
+                stage.setTitle("View or update an existing appointment");
+                stage.showAndWait();
+                refreshTable();
+            } catch (IOException ex) {
+                Logger.getLogger(AppointmentsPageController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
-    
+
+    @FXML
+    void deleteAppointmentButtonHandler(ActionEvent event) throws SQLException {
+        if (tblViewAppointments.getSelectionModel().getSelectedItem() != null) {
+            Appointment apptToDelete = tblViewAppointments.getSelectionModel().getSelectedItem();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you wish to delete "
+                    + "the appointment titled \"" + apptToDelete.getTitle() + "\"?"
+                    + "\nThis cannot be undone.", ButtonType.YES, ButtonType.NO);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setHeaderText(null);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                if (DatabaseHelper.deleteAppointment(apptToDelete.getAppointmentID())) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, "Appointment has been deleted successfully.");
+                    alert.initStyle(StageStyle.UTILITY);
+                    alert.setHeaderText(null);
+                    alert.showAndWait();
+                    dataWasUpdated = true;
+                    refreshTable();
+                }
+            }
+        }
+    }
+
     //Re-populates table if changes are detected
     private void refreshTable() {
         if (dataWasUpdated) {
@@ -152,10 +185,14 @@ public class AppointmentsPageController implements Initializable {
                 tblViewAppointments.getItems().clear();
                 populateTableData();
                 dataWasUpdated = false;
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException ex) {
+                Logger.getLogger(AppointmentsPageController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public static ObservableList getApptList() {
+        return apptList;
     }
 
     //Allows table to not re-populate if nothing has changed for improved runtime

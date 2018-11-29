@@ -7,6 +7,8 @@ import c195.project.DatabaseHelper;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -55,7 +57,6 @@ public class UpdateCustomerPageController implements Initializable {
     private Stage currentStage;
     private Customer customer;
     private Address address;
-    private int custId, addrId;
     private String currentUser;
 
     private final ObservableList cityListUSA = FXCollections.observableArrayList(
@@ -65,6 +66,8 @@ public class UpdateCustomerPageController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -168,9 +171,9 @@ public class UpdateCustomerPageController implements Initializable {
                 alert.showAndWait();
                 CustomerPageController.setDataWasUpdated(true);
                 currentStage.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            } catch (SQLException ex) {
+                Logger.getLogger(UpdateCustomerPageController.class.getName()).log(Level.SEVERE, null, ex);
+            } 
         } else {
             showErrorAlert("Please fill out all fields.");
         }
