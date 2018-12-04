@@ -32,7 +32,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -75,14 +74,6 @@ public class ViewUpdateAppointmentPageController implements Initializable {
     private TextArea txtViewApptDescription;
     @FXML
     private Label lblViewApptConsultant;
-    @FXML
-    private Button btnSaveViewAppt;
-    @FXML
-    private Button btnClearViewAppt;
-    @FXML
-    private Button btnCancelViewAppt;
-    @FXML
-    private Button btnViewApptViewCust;
 
     private C195ProjectWendler mainApp;
     private Stage currentStage;
@@ -93,6 +84,7 @@ public class ViewUpdateAppointmentPageController implements Initializable {
     private ObservableList<Customer> custList = null;
     private ObservableList<Address> addrList = null;
     private int selectedStartHour;
+    private static boolean openedFromCalendar = false;
 
     final private ObservableList locationList = FXCollections.observableArrayList(
             "London, England", "Phoenix, Arizona", "New York, New York");
@@ -211,6 +203,7 @@ public class ViewUpdateAppointmentPageController implements Initializable {
                     alert.setHeaderText(null);
                     alert.showAndWait();
                     AppointmentsPageController.setDataWasUpdated(true);
+                    CalendarPageController.setDataWasUpdated(true);
                     currentStage.close();
                 } else {
                     showErrorAlert("Error while updating appointment.");
@@ -219,7 +212,6 @@ public class ViewUpdateAppointmentPageController implements Initializable {
         } else {
             showErrorAlert("Please fill in all appropriate fields.");
         }
-
     }
 
     void createObjectsOnLoad() {
@@ -420,7 +412,12 @@ public class ViewUpdateAppointmentPageController implements Initializable {
     }
 
     private boolean checkForScheduleConflicts() {
-        ObservableList<Appointment> apptList = AppointmentsPageController.getApptList();
+        ObservableList<Appointment> apptList;
+        if (!openedFromCalendar) {
+            apptList = AppointmentsPageController.getApptList();
+        } else {
+            apptList = CalendarPageController.getApptList();
+        }
         LocalDate selectedDay = dateViewAppt.getValue();
         LocalDate startDayToCompare;
         LocalDateTime startTimeToCompare, endTimeToCompare,
@@ -508,6 +505,14 @@ public class ViewUpdateAppointmentPageController implements Initializable {
 
     public void setMainApp(C195ProjectWendler mainApp) {
         this.mainApp = mainApp;
+    }
+
+    public static boolean isOpenedFromCalendar() {
+        return openedFromCalendar;
+    }
+
+    public static void setOpenedFromCalendar(boolean openedFromCalendar) {
+        ViewUpdateAppointmentPageController.openedFromCalendar = openedFromCalendar;
     }
 
     //Shows an alert pop-up with no icon or header text

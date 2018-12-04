@@ -57,6 +57,7 @@
             </Label>
             <TextField fx:id="txtViewApptTitle" layoutX="256.0" layoutY="112.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
             <ComboBox fx:id="cmbViewApptType" layoutX="256.0" layoutY="152.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
+            <ComboBox fx:id="cmbViewApptCust" editable="true" layoutX="256.0" layoutY="193.0" onAction="#cmbViewApptCustHandler" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
             <TextField fx:id="txtViewApptContact" layoutX="256.0" layoutY="232.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
             <DatePicker fx:id="dateViewAppt" layoutX="256.0" layoutY="272.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
             <ChoiceBox fx:id="cmbViewApptHrStart" layoutX="255.0" layoutY="312.0" onAction="#cmbNewApptStartTimeHandler" prefHeight="30.0" prefWidth="85.0" AnchorPane.rightAnchor="170.0" />
@@ -95,7 +96,6 @@
                   <Font name="Calibri Light" size="20.0" />
                </font>
             </Label>
-            <ComboBox fx:id="cmbViewApptCust" editable="true" layoutX="256.0" layoutY="193.0" onAction="#cmbViewApptCustHandler" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
             <Label fx:id="lblViewApptConsultant" layoutX="213.0" layoutY="68.0" text="Consultant: User" AnchorPane.leftAnchor="213.0">
                <font>
                   <Font name="Calibri Light" size="14.0" />

@@ -14,7 +14,7 @@ public class User {
     private String createDate;
     private String createdBy;
     private String lastUpdateBy;
-    private Timestamp lastUpdate;
+    private String lastUpdate;
     private boolean isActive;
     
     public User() {
@@ -113,14 +113,14 @@ public class User {
     /**
      * @return the lastUpdate
      */
-    public Timestamp getLastUpdate() {
+    public String getLastUpdate() {
         return lastUpdate;
     }
 
     /**
      * @param lastUpdate the lastUpdate to set
      */
-    public void setLastUpdate(Timestamp lastUpdate) {
+    public void setLastUpdate(String lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 

@@ -30,7 +30,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -70,14 +69,6 @@ public class NewAppointmentPageController implements Initializable {
     private ChoiceBox<String> cmbNewApptLocation;
     @FXML
     private TextArea txtNewApptDescription;
-    @FXML
-    private Button btnSaveNewAppt;
-    @FXML
-    private Button btnClearNewAppt;
-    @FXML
-    private Button btnCancelNewAppt;
-    @FXML
-    private Button btnNewApptViewCust;
 
     private C195ProjectWendler mainApp;
     private Stage currentStage;
@@ -87,6 +78,7 @@ public class NewAppointmentPageController implements Initializable {
     private ObservableList<Customer> custList = null;
     private ObservableList<Address> addrList = null;
     private boolean firstLoad = true;
+    private static boolean openedFromCalendar = false;
     private int selectedStartHour;
     final private ObservableList hourList = FXCollections.observableArrayList(
             8, 9, 10, 11, 12, 1, 2, 3, 4);
@@ -296,6 +288,7 @@ public class NewAppointmentPageController implements Initializable {
                     alert.setHeaderText(null);
                     alert.showAndWait();
                     AppointmentsPageController.setDataWasUpdated(true);
+                    CalendarPageController.setDataWasUpdated(true);
                     currentStage.close();
                 } else {
                     showErrorAlert("Error while saving appointment.");
@@ -345,7 +338,12 @@ public class NewAppointmentPageController implements Initializable {
     }
 
     private boolean checkForScheduleConflicts() {
-        ObservableList<Appointment> apptList = AppointmentsPageController.getApptList();
+        ObservableList<Appointment> apptList;
+        if (!openedFromCalendar) {
+            apptList = AppointmentsPageController.getApptList();
+        } else {
+            apptList = CalendarPageController.getApptList();
+        }
         LocalDate selectedDay = dateNewAppt.getValue();
         LocalDate startDayToCompare;
         LocalDateTime startTimeToCompare, endTimeToCompare,
@@ -443,6 +441,14 @@ public class NewAppointmentPageController implements Initializable {
             original = original.toLowerCase();
             return original.substring(0, 1).toUpperCase() + original.substring(1);
         }
+    }
+
+    public static boolean isOpenedFromCalendar() {
+        return openedFromCalendar;
+    }
+
+    public static void setOpenedFromCalendar(boolean openedFromCalendar) {
+        NewAppointmentPageController.openedFromCalendar = openedFromCalendar;
     }
 
     public void setMainApp(C195ProjectWendler mainApp) {

@@ -85,7 +85,7 @@ public class DatabaseHelper {
     }
 
     public static User addNewUser(String username, String password) throws SQLException {
-        User newUser = null;
+        User newUser;
         String queryString = "INSERT INTO " + TBL_USER
                 + " (" + USER_COL1 + ", " + USER_COL2 + ", " + USER_COL3 + ", " + USER_COL4
                 + ", " + USER_COL5 + ", " + USER_COL6 + ", " + USER_COL7 + ") "
@@ -102,18 +102,26 @@ public class DatabaseHelper {
             statement.setString(6, getCurrentDate());
             statement.setString(7, username);
 
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("No rows affected, "
+                        + "address insertion failed.");
+            } else {
                 newUser = new User();
                 newUser.setUserName(username);
                 newUser.setPassword(password);
                 try (ResultSet generatedKey = statement.getGeneratedKeys()) {
-                    newUser.setUserID(generatedKey.getInt(1));
+                    if (generatedKey.next()) {
+                        newUser.setUserID(generatedKey.getInt(1));
+                    } else {
+                        throw new SQLException("No ID obtained, "
+                                + "user ID creation failed.");
+                    }
                 }
                 return newUser;
             }
         }
-        return newUser;
     }
 
     public static User userLogin(String username, String password) {
@@ -464,6 +472,33 @@ public class DatabaseHelper {
 
             return affectedRows != 0;
         }
+    }
+
+    public static ObservableList getUserList() throws SQLException {
+        ObservableList<User> userList = FXCollections.observableArrayList();
+        String queryString = "SELECT * FROM " + TBL_USER;
+        ResultSet result;
+        User user;
+
+        try (Connection conn = getConnection();
+                PreparedStatement statement = conn.prepareStatement(queryString);) {
+            result = statement.executeQuery();
+
+            while (result.next()) {
+                user = new User();
+                user.setUserID(result.getInt(USER_COL0));
+                user.setUserName(result.getString(USER_COL1));
+                user.setPassword(result.getString(USER_COL2));
+                user.setIsActive(result.getBoolean(USER_COL3));
+                user.setCreatedBy(result.getString(USER_COL4));
+                user.setCreateDate(result.getString(USER_COL5));
+                user.setLastUpdate(result.getString(USER_COL6));
+                user.setLastUpdateBy(result.getString(USER_COL7));
+
+                userList.add(user);
+            }
+        }
+        return userList;
     }
 
     public static ObservableList getCustomerList() throws SQLException {

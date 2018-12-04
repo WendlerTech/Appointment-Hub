@@ -2,7 +2,8 @@ package c195.project;
 
 /**
  *
- * @author https://stackoverflow.com/questions/19924852/autocomplete-combobox-in-javafx/27384068#27384068
+ * @author
+ * https://stackoverflow.com/questions/19924852/autocomplete-combobox-in-javafx/27384068#27384068
  */
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,32 +36,33 @@ public class SearchCombo {
 
             @Override
             public void handle(KeyEvent event) {
-                if (null != event.getCode()) {
-                    switch (event.getCode()) {
-                        case UP:
-                            caretPos = -1;
-                            moveCaret(comboBox.getEditor().getText().length());
-                            return;
-                        case DOWN:
-                            if (!comboBox.isShowing()) {
-                                comboBox.show();
-                            }
-                            caretPos = -1;
-                            moveCaret(comboBox.getEditor().getText().length());
-                            return;
-                        case BACK_SPACE:
-                            moveCaretToPos = true;
-                            caretPos = comboBox.getEditor().getCaretPosition();
-                            break;
-                        case DELETE:
-                            moveCaretToPos = true;
-                            caretPos = comboBox.getEditor().getCaretPosition();
-                            break;
-                        case ENTER:
-                            return;
-                        default:
-                            break;
+                if (event.getCode() == KeyCode.UP) {
+                    caretPos = -1;
+                    if (comboBox.getEditor().getText() != null) {
+                        moveCaret(comboBox.getEditor().getText().length());
                     }
+                    return;
+                } else if (event.getCode() == KeyCode.DOWN) {
+                    if (!comboBox.isShowing()) {
+                        comboBox.show();
+                    }
+                    caretPos = -1;
+                    if (comboBox.getEditor().getText() != null) {
+                        moveCaret(comboBox.getEditor().getText().length());
+                    }
+                    return;
+                } else if (event.getCode() == KeyCode.BACK_SPACE) {
+                    if (comboBox.getEditor().getText() != null) {
+                        moveCaretToPos = true;
+                        caretPos = comboBox.getEditor().getCaretPosition();
+                    }
+                } else if (event.getCode() == KeyCode.DELETE) {
+                    if (comboBox.getEditor().getText() != null) {
+                        moveCaretToPos = true;
+                        caretPos = comboBox.getEditor().getCaretPosition();
+                    }
+                } else if (event.getCode() == KeyCode.ENTER) {
+                    return;
                 }
 
                 if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT || event.getCode().equals(KeyCode.SHIFT) || event.getCode().equals(KeyCode.CONTROL)
@@ -75,14 +77,19 @@ public class SearchCombo {
                         list.add(aData);
                     }
                 }
-                String t = comboBox.getEditor().getText();
+                String t = "";
+                if (comboBox.getEditor().getText() != null) {
+                    t = comboBox.getEditor().getText();
+                }
 
                 comboBox.setItems(list);
                 comboBox.getEditor().setText(t);
                 if (!moveCaretToPos) {
                     caretPos = -1;
                 }
+
                 moveCaret(t.length());
+
                 if (!list.isEmpty()) {
                     comboBox.show();
                 }

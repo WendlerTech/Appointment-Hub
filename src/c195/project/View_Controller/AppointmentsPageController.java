@@ -19,7 +19,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -46,14 +45,6 @@ public class AppointmentsPageController implements Initializable {
     private TableColumn<Appointment, String> colApptLocation;
     @FXML
     private TableColumn<Appointment, String> colApptConsultant;
-    @FXML
-    private Button btnApptDelete;
-    @FXML
-    private Button btnApptViewUpdate;
-    @FXML
-    private Button btnApptAdd;
-    @FXML
-    private Button btnApptBack;
 
     private C195ProjectWendler mainApp;
     private Stage currentStage;
@@ -93,7 +84,7 @@ public class AppointmentsPageController implements Initializable {
         colApptContact.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getContact()));
         colApptType.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getType()));
         colApptLocation.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLocation()));
-        colApptConsultant.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCreatedBy()));
+        colApptConsultant.setCellValueFactory(cellData -> new SimpleStringProperty(capitalizeFirstLetter(cellData.getValue().getCreatedBy())));
     }
 
     @FXML
@@ -116,6 +107,7 @@ public class AppointmentsPageController implements Initializable {
 
             stage.setScene(new Scene(root));
             stage.setTitle("Add a new appointment");
+            NewAppointmentPageController.setOpenedFromCalendar(false);
             stage.showAndWait();
             refreshTable();
         } catch (IOException ex) {
@@ -146,6 +138,7 @@ public class AppointmentsPageController implements Initializable {
 
                 stage.setScene(new Scene(root));
                 stage.setTitle("View or update an existing appointment");
+                ViewUpdateAppointmentPageController.setOpenedFromCalendar(false);
                 stage.showAndWait();
                 refreshTable();
             } catch (IOException ex) {
@@ -188,6 +181,16 @@ public class AppointmentsPageController implements Initializable {
             } catch (SQLException ex) {
                 Logger.getLogger(AppointmentsPageController.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+
+    public String capitalizeFirstLetter(String original) {
+        //Capitalizes first letter of a string       
+        if (original == null || original.length() == 0) {
+            return original;
+        } else {
+            original = original.toLowerCase();
+            return original.substring(0, 1).toUpperCase() + original.substring(1);
         }
     }
 

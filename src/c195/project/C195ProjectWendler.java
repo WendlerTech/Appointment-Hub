@@ -11,6 +11,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -62,8 +64,8 @@ public class C195ProjectWendler extends Application {
                 PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
             printWriter.println("[" + DatabaseHelper.getCurrentDate()
                     + "] - " + currentUser.getUserName());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(C195ProjectWendler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -80,8 +82,8 @@ public class C195ProjectWendler extends Application {
 
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(C195ProjectWendler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -97,8 +99,8 @@ public class C195ProjectWendler extends Application {
 
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(C195ProjectWendler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -114,8 +116,8 @@ public class C195ProjectWendler extends Application {
 
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(C195ProjectWendler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -131,8 +133,8 @@ public class C195ProjectWendler extends Application {
 
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(C195ProjectWendler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -148,8 +150,8 @@ public class C195ProjectWendler extends Application {
 
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(C195ProjectWendler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -160,13 +162,15 @@ public class C195ProjectWendler extends Application {
     public User getCurrentUser() {
         return currentUser;
     }
-    
+
     public String getUrl() {
         return appointmentUrl;
     }
 
     /**
      * @param args the command line arguments
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.sql.SQLException
      */
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         launch(args);

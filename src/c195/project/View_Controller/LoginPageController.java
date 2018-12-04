@@ -10,9 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -26,17 +24,9 @@ import javafx.stage.StageStyle;
 public class LoginPageController implements Initializable {
 
     @FXML
-    private Label lblLoginUsername;
-    @FXML
-    private Label lblLoginPassword;
-    @FXML
     private TextField txtLoginUsername;
     @FXML
     private PasswordField txtLoginPassword;
-    @FXML
-    private Button btnLogin;
-    @FXML
-    private Button btnLoginRegister;
 
     private C195ProjectWendler mainApp;
     private Stage currentStage;
@@ -46,6 +36,8 @@ public class LoginPageController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
@@ -19,24 +18,19 @@ public class DashboardPageController implements Initializable {
 
     @FXML
     private Label lblDashWelcome;
-    @FXML
-    private Button btnDashAppt;
-    @FXML
-    private Button btnDashCust;
-    @FXML
-    private Button btnDashCalendar;
-    @FXML
-    private Button btnDashReports;
 
     private C195ProjectWendler mainApp;
     private Stage currentStage;
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
     }
 
     //Updates welcome label with the user's name
