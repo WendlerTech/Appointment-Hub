@@ -64,7 +64,7 @@ public class ReportsPageController implements Initializable {
     private Stage currentStage;
     private ObservableList<Appointment> apptList, apptListToDisplay, scheduleListToDisplay;
     private ObservableList<Customer> custList, custListToDisplay;
-    private ObservableList<Address> addrList, addrListToDisplay;
+    private ObservableList<Address> addrList;
     private ObservableList<User> userList;
     private final ObservableList cityListEngland = FXCollections.observableArrayList(
             "London", "Manchester", "Liverpool", "Birmingham");
@@ -92,8 +92,6 @@ public class ReportsPageController implements Initializable {
         ObservableList countryList = FXCollections.observableArrayList(
                 "England", "USA");
 
-        getData();
-
         cmbAvailableReports.getItems().add("Customers By City");
         cmbAvailableReports.getItems().add("Consultant Schedule");
         cmbAvailableReports.getItems().add("Appointment Types By Month");
@@ -105,6 +103,34 @@ public class ReportsPageController implements Initializable {
         cmbReportsCountry.setItems(countryList);
         cmbReportsMonth.setItems(monthList);
         cmbReportsApptType.setItems(apptTypeList);
+
+        cmbReportsConsultantName.setEditable(true);
+    }
+
+    private void getData() {
+        try {
+            if (mainApp.isInitialDataChanged()) {
+                apptList = DatabaseHelper.getAppointmentList();
+            } else {
+                apptList = mainApp.getAppointmentList();
+            }
+            userList = DatabaseHelper.getUserList();
+            custList = DatabaseHelper.getCustomerList();
+            addrList = DatabaseHelper.getAddressList();
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportsPageController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void setStage(Stage stage) {
+        currentStage = stage;
+    }
+
+    public void setMainApp(C195ProjectWendler mainApp) {
+        this.mainApp = mainApp;
+
+        getData();
+
         cmbReportsConsultantName.setItems(userList);
 
         cmbReportsConsultantName.setConverter(new StringConverter<User>() {
@@ -119,28 +145,8 @@ public class ReportsPageController implements Initializable {
             }
         });
 
-        cmbReportsConsultantName.setEditable(true);
         SearchCombo.autoCompleteComboBoxPlus(cmbReportsConsultantName, (typedText, User)
                 -> User.getUserName().toLowerCase().contains(typedText.toLowerCase()));
-    }
-
-    private void getData() {
-        try {
-            userList = DatabaseHelper.getUserList();
-            apptList = DatabaseHelper.getAppointmentList();
-            custList = DatabaseHelper.getCustomerList();
-            addrList = DatabaseHelper.getAddressList();
-        } catch (SQLException ex) {
-            Logger.getLogger(ReportsPageController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void setStage(Stage stage) {
-        currentStage = stage;
-    }
-
-    public void setMainApp(C195ProjectWendler mainApp) {
-        this.mainApp = mainApp;
     }
 
     @FXML
@@ -236,7 +242,7 @@ public class ReportsPageController implements Initializable {
 
             //Creates new table columns
             TableColumn<Customer, String> colName = new TableColumn<>("Name");
-            colName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustName()));
+            colName.setCellValueFactory(cellData -> new SimpleStringProperty(capitalizeFirstLetter(cellData.getValue().getCustName())));
             tblCustByCity.getColumns().add(colName);
 
             TableColumn<Customer, String> colCustSince = new TableColumn<>("Customer Since");
@@ -244,7 +250,7 @@ public class ReportsPageController implements Initializable {
             tblCustByCity.getColumns().add(colCustSince);
 
             TableColumn<Customer, String> colCreatedBy = new TableColumn<>("Created By");
-            colCreatedBy.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCreatedBy()));
+            colCreatedBy.setCellValueFactory(cellData -> new SimpleStringProperty(capitalizeFirstLetter(cellData.getValue().getCreatedBy())));
             tblCustByCity.getColumns().add(colCreatedBy);
 
             int selectedCityId = DatabaseHelper.getCityID(cmbReportsCity.getSelectionModel().getSelectedItem());

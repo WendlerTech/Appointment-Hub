@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="837.0" xmlns="http://javafx.com/javafx/8.0.152" xmlns:fx="http://javafx.com/fxml/1" fx:controller="c195.project.View_Controller.LoginPageController">
+<VBox prefHeight="490.0" prefWidth="837.0" xmlns="http://javafx.com/javafx/8.0.152" xmlns:fx="http://javafx.com/fxml/1" fx:controller="c195.project.View_Controller.LoginPageController">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="356.0" prefWidth="518.0" style="-fx-background-color: lightgrey;" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: lightgrey;" VBox.vgrow="ALWAYS">
       <children>
             <Label fx:id="lblLoginUsername" layoutX="227.0" layoutY="187.0" text="Username:" AnchorPane.leftAnchor="227.0" AnchorPane.topAnchor="187.0">
                <font>

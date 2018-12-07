@@ -5,12 +5,15 @@ import c195.project.DatabaseHelper;
 import c195.project.User;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -27,21 +30,32 @@ public class LoginPageController implements Initializable {
     private TextField txtLoginUsername;
     @FXML
     private PasswordField txtLoginPassword;
+    @FXML
+    private Label lblLoginUsername;
+    @FXML
+    private Label lblLoginPassword;
+    @FXML
+    private Button btnLogin;
+    @FXML
+    private Button btnLoginRegister;
 
     private C195ProjectWendler mainApp;
     private Stage currentStage;
     private User user;
     private String username, password;
     private String newUsername, newPassword;
+    private final Locale argentineLocale = new Locale("es", "AR");
+    private ResourceBundle languageBundle = null;
 
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
     }
 
     public void setStage(Stage stage) {
@@ -54,21 +68,17 @@ public class LoginPageController implements Initializable {
         password = txtLoginPassword.getText();
 
         if (username.length() == 0 || password.length() == 0) {
-            showErrorAlert("Please enter your credentials. "
-                    + "\nIf you're a first time user, please enter your "
-                    + "desired username & password, then click register.");
+            showErrorAlert(languageBundle.getString("blankFields"));
         } else {
             if (matchRegex(username)) {
                 user = DatabaseHelper.userLogin(username, password);
                 if (user != null) {
                     mainApp.loginButton(user);
                 } else {
-                    showErrorAlert("Invalid username or password."
-                            + "\nIf you're a first time user, please enter your "
-                            + "desired username & password, then click register.");
+                    showErrorAlert(languageBundle.getString("invalidPass"));
                 }
             } else {
-                showErrorAlert("Invalid character in username.");
+                showErrorAlert(languageBundle.getString("invalidChar"));
             }
         }
     }
@@ -79,22 +89,17 @@ public class LoginPageController implements Initializable {
         newPassword = txtLoginPassword.getText();
 
         if (newUsername.length() == 0 || newPassword.length() == 0) {
-            showErrorAlert("Fields can't be blank."
-                    + "\nIf you're a first time user, please enter your "
-                    + "desired username & password, then click register.");
+            showErrorAlert(languageBundle.getString("blankFields"));
         } else {
             if (matchRegex(newUsername)) {
-                if (newUsername.length() == 0) {
-                    //Username is blank
-                    showErrorAlert("Your username can't be blank.");
-                } else if (newPassword.length() < 4) {
+                if (newPassword.length() < 4) {
                     //Password isn't long enough
-                    showErrorAlert("Your password must be at least 4 characters.");
+                    showErrorAlert(languageBundle.getString("shortPassword"));
                 } else {
                     if (!DatabaseHelper.checkIfUserExists(newUsername)) {
                         //Username isn't taken
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                                "Are you sure you wish to register as " + newUsername
+                                languageBundle.getString("registerConfirm") + newUsername
                                 + "?", ButtonType.YES, ButtonType.NO);
                         alert.initStyle(StageStyle.UTILITY);
                         alert.setHeaderText(null);
@@ -105,18 +110,16 @@ public class LoginPageController implements Initializable {
                             if (user != null) {
                                 mainApp.loginButton(user);
                             } else {
-                                showErrorAlert("There was a problem saving data."
-                                        + "\nPlease try again.");
+                                showErrorAlert(languageBundle.getString("errorSavingData"));
                             }
                         }
                     } else {
-                        showErrorAlert("Username is already taken.");
+                        showErrorAlert(languageBundle.getString("usernameTaken"));
                     }
                 }
             } else {
                 //Username contains illegal characters
-                showErrorAlert("Invalid character. Please use only letters "
-                        + "in your username.");
+                showErrorAlert(languageBundle.getString("invalidChar"));
             }
         }
     }
@@ -136,5 +139,18 @@ public class LoginPageController implements Initializable {
 
     public void setMainApp(C195ProjectWendler mainApp) {
         this.mainApp = mainApp;
+    }
+
+    public void checkLocale() {
+        if (Locale.getDefault() == Locale.US) {
+            languageBundle = ResourceBundle.getBundle("c195.project.Language_Bundles/Bundle_en_US");
+        } else if (Locale.getDefault().equals(argentineLocale)) {
+            languageBundle = ResourceBundle.getBundle("c195.project.Language_Bundles/Bundle_es_AR");
+        }
+
+        lblLoginUsername.setText(languageBundle.getString("lblUsername"));
+        lblLoginPassword.setText(languageBundle.getString("lblPassword"));
+        btnLoginRegister.setText(languageBundle.getString("btnRegister"));
+        btnLogin.setText(languageBundle.getString("btnLogin"));
     }
 }

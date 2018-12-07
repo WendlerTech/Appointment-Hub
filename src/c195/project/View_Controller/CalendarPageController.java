@@ -81,12 +81,10 @@ public class CalendarPageController implements Initializable {
         grpSortApptBy.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
             if (grpSortApptBy.getSelectedToggle() != null) {
                 RadioButton selectedBtn = (RadioButton) grpSortApptBy.getSelectedToggle();
-                showWeeklyData = !selectedBtn.getText().equals("Next month");
+                showWeeklyData = !selectedBtn.getText().equals("This month");
                 populateTableData();
             }
         });
-
-        grpSortApptBy.selectToggle(radApptSortWeek);
     }
 
     public void setStage(Stage stage) {
@@ -155,11 +153,22 @@ public class CalendarPageController implements Initializable {
     }
 
     public void populateTableData() {
+        if (mainApp.isInitialDataChanged()) {
+            try {
+                apptList = DatabaseHelper.getAppointmentList();
+            } catch (SQLException ex) {
+                Logger.getLogger(CalendarPageController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            apptList = mainApp.getAppointmentList();
+        }
+        /*
         try {
             apptList = DatabaseHelper.getAppointmentList();
         } catch (SQLException ex) {
             Logger.getLogger(CalendarPageController.class.getName()).log(Level.SEVERE, null, ex);
         }
+         */
 
         if (showWeeklyData) {
             displayWeeklyData();
@@ -176,6 +185,7 @@ public class CalendarPageController implements Initializable {
 
     public void setMainApp(C195ProjectWendler mainApp) {
         this.mainApp = mainApp;
+        grpSortApptBy.selectToggle(radApptSortWeek);
     }
 
     //Re-populates table if changes are detected
@@ -210,6 +220,7 @@ public class CalendarPageController implements Initializable {
                     alert.setHeaderText(null);
                     alert.showAndWait();
                     dataWasUpdated = true;
+                    mainApp.setInitialDataChanged(true);
                     refreshTable();
                 }
             }

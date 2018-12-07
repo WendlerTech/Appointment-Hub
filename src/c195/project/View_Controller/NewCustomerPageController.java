@@ -6,13 +6,14 @@ import c195.project.DatabaseHelper;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -43,12 +44,6 @@ public class NewCustomerPageController implements Initializable {
     private TextField txtNewCustZip;
     @FXML
     private CheckBox chkNewCustActive;
-    @FXML
-    private Button btnAddCustomer;
-    @FXML
-    private Button btnNewCustClear;
-    @FXML
-    private Button btnNewCustCancel;
 
     private Stage currentStage;
     private Customer newCust;
@@ -62,6 +57,9 @@ public class NewCustomerPageController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -141,9 +139,10 @@ public class NewCustomerPageController implements Initializable {
 
             try {
                 DatabaseHelper.addNewCustomer(newCust, custAddress);
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException ex) {
+                Logger.getLogger(NewCustomerPageController.class.getName()).log(Level.SEVERE, null, ex);
             }
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION,
                     "Customer successfully added.");
             alert.initStyle(StageStyle.UTILITY);

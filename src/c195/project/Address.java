@@ -1,12 +1,11 @@
 package c195.project;
 
-
 /**
  *
  * @author Nick
  */
 public class Address {
-    
+
     private int addressID;
     private int cityID;
     private String address;
@@ -17,12 +16,12 @@ public class Address {
     private String lastUpdatedBy;
     private String createDate;
     private String lastUpdated;
-    
+
     public Address() {
-        
+
     }
 
-    public Address(String address, String address2, String zip, 
+    public Address(String address, String address2, String zip,
             String phone, int cityID) {
         this.address = address;
         this.address2 = address2;
@@ -30,7 +29,7 @@ public class Address {
         this.phoneNumber = phone;
         this.cityID = cityID;
     }
-    
+
     /**
      * @return the addressID
      */
@@ -167,7 +166,7 @@ public class Address {
     /**
      * @param lastUpdated the lastUpdated to set
      */
-    public void setLastUpdated (String lastUpdated) {
+    public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 }

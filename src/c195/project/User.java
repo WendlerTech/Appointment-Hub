@@ -1,13 +1,11 @@
 package c195.project;
 
-import java.sql.Timestamp;
-
 /**
  *
  * @author Nick
  */
 public class User {
-    
+
     private int userID;
     private String userName;
     private String password;
@@ -16,11 +14,11 @@ public class User {
     private String lastUpdateBy;
     private String lastUpdate;
     private boolean isActive;
-    
+
     public User() {
-        
+
     }
-    
+
     public User(String name, String pass) {
         userName = name;
         password = pass;

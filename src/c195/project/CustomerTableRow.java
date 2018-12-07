@@ -7,16 +7,16 @@ import javafx.beans.property.SimpleBooleanProperty;
  * @author Nick
  */
 public class CustomerTableRow {
-    
+
     private int custId, addressId;
     private String custName, phoneNum, city;
     private SimpleBooleanProperty custIsActive;
-    
+
     public CustomerTableRow() {
-        this.custIsActive = new SimpleBooleanProperty();        
+        this.custIsActive = new SimpleBooleanProperty();
     }
-    
-    public CustomerTableRow(String name, String phone, String city, 
+
+    public CustomerTableRow(String name, String phone, String city,
             boolean isActive) {
         this.custName = name;
         this.phoneNum = phone;
@@ -54,7 +54,7 @@ public class CustomerTableRow {
 
     public void setCustIsActive(boolean custIsActive) {
         this.custIsActive.set(custIsActive);
-    }    
+    }
 
     public int getCustId() {
         return custId;
@@ -70,5 +70,5 @@ public class CustomerTableRow {
 
     public void setAddressId(int addressId) {
         this.addressId = addressId;
-    }  
+    }
 }

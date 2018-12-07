@@ -19,8 +19,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -74,6 +76,12 @@ public class ViewUpdateAppointmentPageController implements Initializable {
     private TextArea txtViewApptDescription;
     @FXML
     private Label lblViewApptConsultant;
+    @FXML
+    private Label lblUpdateStartTime;
+    @FXML
+    private Label lblUpdateEndTime;
+    @FXML
+    private Label lblUpdateTime2;
 
     private C195ProjectWendler mainApp;
     private Stage currentStage;
@@ -169,6 +177,7 @@ public class ViewUpdateAppointmentPageController implements Initializable {
         cmbViewApptLocation.getSelectionModel().select(appointment.getLocation());
         txtViewApptDescription.setText(appointment.getDescription());
         createObjectsOnLoad();
+        updateTimezoneLabels();
     }
 
     @FXML
@@ -204,6 +213,7 @@ public class ViewUpdateAppointmentPageController implements Initializable {
                     alert.showAndWait();
                     AppointmentsPageController.setDataWasUpdated(true);
                     CalendarPageController.setDataWasUpdated(true);
+                    mainApp.setInitialDataChanged(true);
                     currentStage.close();
                 } else {
                     showErrorAlert("Error while updating appointment.");
@@ -247,7 +257,7 @@ public class ViewUpdateAppointmentPageController implements Initializable {
     }
 
     @FXML
-    void cmbNewApptStartTimeHandler(ActionEvent event) {
+    void cmbViewApptStartTimeHandler(ActionEvent event) {
         selectedStartHour = cmbViewApptHrStart.getSelectionModel().getSelectedIndex();
         if (selectedStartHour == 8) {
             //Automatically sets end time to 5:00PM if after 4PM is chosen
@@ -273,6 +283,12 @@ public class ViewUpdateAppointmentPageController implements Initializable {
             cmbViewApptHrEnd.setItems(endHourList);
             cmbViewApptMinEnd.setItems(endMinuteList);
         }
+        updateTimezoneLabels();
+    }
+
+    @FXML
+    void cmbViewApptTimeRefreshHandler(ActionEvent event) {
+        updateTimezoneLabels();
     }
 
     @FXML
@@ -371,6 +387,120 @@ public class ViewUpdateAppointmentPageController implements Initializable {
         //Closes window
         AppointmentsPageController.setDataWasUpdated(false);
         currentStage.close();
+    }
+
+    private void updateTimezoneLabels() {
+        if (cmbViewApptHrStart.getValue() != null
+                && cmbViewApptMinStart.getValue() != null
+                && cmbViewApptHrEnd.getValue() != null
+                && cmbViewApptMinEnd.getValue() != null
+                && dateViewAppt.getValue() != null
+                && cmbViewApptLocation.getValue() != null) {
+            TimeZone originalTZ = TimeZone.getDefault();
+            lblUpdateTime2.setVisible(true);
+            lblUpdateStartTime.setVisible(true);
+            lblUpdateEndTime.setVisible(true);
+
+            switch (cmbViewApptLocation.getSelectionModel().getSelectedItem()) {
+                case "London, England":
+                    TimeZone.setDefault(TimeZone.getTimeZone("Europe/London"));
+                    break;
+                case "Phoenix, Arizona":
+                    TimeZone.setDefault(TimeZone.getTimeZone("US/Arizona"));
+                    break;
+                case "New York, New York":
+                    TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
+                    break;
+                default:
+                    TimeZone.setDefault(originalTZ);
+            }
+
+            Calendar startTimeCal = Calendar.getInstance();
+            Calendar endTimeCal = Calendar.getInstance();
+            LocalDate date = dateViewAppt.getValue();
+
+            //============Start Time============
+            int hrStart = Integer.parseInt(cmbViewApptHrStart.getValue());
+            int minStart = Integer.parseInt(cmbViewApptMinStart.getValue());
+            int startMilitaryDifferential;
+            int startHour;
+            String startMinuteLeadDigit;
+            String startAMPM;
+
+            if (hrStart < 7) {
+                hrStart += 12; //Allows for 24h format
+            }
+
+            //Sets calendar object to the user's input
+            startTimeCal.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth(), hrStart, minStart);
+
+            //Formats minutes for label
+            if (minStart > 0) {
+                startMinuteLeadDigit = ":" + startTimeCal.get(Calendar.MINUTE);
+            } else {
+                startMinuteLeadDigit = ":0" + startTimeCal.get(Calendar.MINUTE);
+            }
+
+            //============End Time============
+            int hrEnd = Integer.parseInt(cmbViewApptHrEnd.getValue());
+            int minEnd = Integer.parseInt(cmbViewApptMinEnd.getValue());
+            int endMilitaryDifferential;
+            int endHour;
+            String endMinuteLeadDigit;
+            String endAMPM;
+
+            if (hrEnd < 7) {
+                hrEnd += 12; //Allows for 24h format
+            }
+
+            endTimeCal.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth(), hrEnd, minEnd);
+
+            if (minEnd > 0) {
+                endMinuteLeadDigit = ":" + endTimeCal.get(Calendar.MINUTE);
+            } else {
+                endMinuteLeadDigit = ":0" + endTimeCal.get(Calendar.MINUTE);
+            }
+
+            //After adding times to the calendar object, applies current user's timezone
+            TimeZone.setDefault(originalTZ);
+            startTimeCal.setTimeZone(originalTZ);
+            endTimeCal.setTimeZone(originalTZ);
+
+            //Decides whether to display AM or PM
+            if (startTimeCal.get(Calendar.HOUR_OF_DAY) > 12) {
+                startMilitaryDifferential = 12;
+                startAMPM = "PM";
+            } else if (startTimeCal.get(Calendar.HOUR_OF_DAY) == 12) {
+                startMilitaryDifferential = 0;
+                startAMPM = "PM";
+            } else {
+                startMilitaryDifferential = 0;
+                startAMPM = "AM";
+            }
+
+            if (endTimeCal.get(Calendar.HOUR_OF_DAY) > 12) {
+                endMilitaryDifferential = 12;
+                endAMPM = "PM";
+            } else if (endTimeCal.get(Calendar.HOUR_OF_DAY) == 12) {
+                endMilitaryDifferential = 0;
+                endAMPM = "PM";
+            } else {
+                endMilitaryDifferential = 0;
+                endAMPM = "AM";
+            }
+
+            //Formats from military time
+            startHour = startTimeCal.get(Calendar.HOUR_OF_DAY) - startMilitaryDifferential;
+            endHour = endTimeCal.get(Calendar.HOUR_OF_DAY) - endMilitaryDifferential;
+
+            //Updates labels
+            lblUpdateStartTime.setText("" + startHour + startMinuteLeadDigit + " " + startAMPM + " - ");
+            lblUpdateEndTime.setText("" + endHour + endMinuteLeadDigit + " " + endAMPM);
+        } else {
+            lblUpdateTime2.setVisible(false);
+            lblUpdateStartTime.setVisible(false);
+            lblUpdateEndTime.setVisible(false);
+        }
     }
 
     private String getApptStartTime() {

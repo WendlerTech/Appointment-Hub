@@ -27,7 +27,7 @@
                 <TableColumn fx:id="calColContact" prefWidth="75.0" text="Contact" />
                   <TableColumn fx:id="calColType" prefWidth="75.0" text="Type" />
                   <TableColumn fx:id="calColLocation" prefWidth="75.0" text="Location" />
-                  <TableColumn fx:id="calColDate" prefWidth="75.0" text="Time" />
+                  <TableColumn fx:id="calColDate" prefWidth="75.0" text="Local Time" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

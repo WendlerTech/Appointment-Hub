@@ -15,7 +15,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -46,12 +45,6 @@ public class UpdateCustomerPageController implements Initializable {
     private TextField txtUpdateCustZip;
     @FXML
     private CheckBox chkUpdateCustActive;
-    @FXML
-    private Button btnUpdateCustomer;
-    @FXML
-    private Button btnUpdateCustClear;
-    @FXML
-    private Button btnUpdateCustCancel;
 
     private C195ProjectWendler mainApp;
     private Stage currentStage;
@@ -66,6 +59,7 @@ public class UpdateCustomerPageController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
@@ -173,7 +167,7 @@ public class UpdateCustomerPageController implements Initializable {
                 currentStage.close();
             } catch (SQLException ex) {
                 Logger.getLogger(UpdateCustomerPageController.class.getName()).log(Level.SEVERE, null, ex);
-            } 
+            }
         } else {
             showErrorAlert("Please fill out all fields.");
         }

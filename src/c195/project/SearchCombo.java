@@ -4,6 +4,8 @@ package c195.project;
  *
  * @author
  * https://stackoverflow.com/questions/19924852/autocomplete-combobox-in-javafx/27384068#27384068
+ * (I actually contributed to this answer by fixing multiple null-pointer
+ * issues)
  */
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

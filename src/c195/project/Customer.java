@@ -5,7 +5,7 @@ package c195.project;
  * @author Nick
  */
 public class Customer {
-    
+
     private int custID;
     private int addressID;
     private int isActive;
@@ -14,11 +14,11 @@ public class Customer {
     private String lastUpdatedBy;
     private String createDate;
     private String lastUpdate;
-    
+
     public Customer() {
-        
+
     }
-    
+
     public Customer(String name, boolean isActive, int address) {
         custName = name;
         addressID = address;

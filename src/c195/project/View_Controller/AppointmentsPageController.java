@@ -60,11 +60,7 @@ public class AppointmentsPageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            populateTableData();
-        } catch (SQLException ex) {
-            Logger.getLogger(AppointmentsPageController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }
 
     public void setStage(Stage stage) {
@@ -73,10 +69,19 @@ public class AppointmentsPageController implements Initializable {
 
     public void setMainApp(C195ProjectWendler mainApp) {
         this.mainApp = mainApp;
+        try {
+            populateTableData();
+        } catch (SQLException ex) {
+            Logger.getLogger(AppointmentsPageController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void populateTableData() throws SQLException {
-        apptList = DatabaseHelper.getAppointmentList();
+        if (mainApp.isInitialDataChanged()) {
+            apptList = DatabaseHelper.getAppointmentList();
+        } else {
+            apptList = mainApp.getAppointmentList();
+        }
 
         tblViewAppointments.setItems(apptList);
 
@@ -165,6 +170,7 @@ public class AppointmentsPageController implements Initializable {
                     alert.setHeaderText(null);
                     alert.showAndWait();
                     dataWasUpdated = true;
+                    mainApp.setInitialDataChanged(dataWasUpdated);
                     refreshTable();
                 }
             }

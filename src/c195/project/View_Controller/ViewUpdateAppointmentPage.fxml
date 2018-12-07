@@ -15,92 +15,96 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <Label layoutX="112.0" layoutY="37.0" text="View/Update Appointment" AnchorPane.leftAnchor="112.0">
+            <Label layoutX="112.0" layoutY="27.0" text="View/Update Appointment" AnchorPane.leftAnchor="112.0">
                <font>
                   <Font name="Calibri" size="26.0" />
                </font>
             </Label>
-            <Label layoutX="117.0" layoutY="115.0" text="Title:" AnchorPane.leftAnchor="117.0">
+            <Label layoutX="117.0" layoutY="105.0" text="Title:" AnchorPane.leftAnchor="117.0">
                <font>
                   <Font name="Calibri Light" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="99.0" layoutY="195.0" text="Customer:" AnchorPane.leftAnchor="74.0">
+            <Label layoutX="74.0" layoutY="185.0" text="Customer:" AnchorPane.leftAnchor="74.0">
                <font>
                   <Font name="Calibri Light" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="104.0" layoutY="235.0" text="Contact:" AnchorPane.leftAnchor="90.0">
+            <Label layoutX="90.0" layoutY="225.0" text="Contact:" AnchorPane.leftAnchor="90.0">
                <font>
                   <Font name="Calibri Light" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="113.0" layoutY="155.0" text="Type:" AnchorPane.leftAnchor="113.0">
+            <Label layoutX="113.0" layoutY="145.0" text="Type:" AnchorPane.leftAnchor="113.0">
                <font>
                   <Font name="Calibri Light" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="84.0" layoutY="395.0" text="Location:" AnchorPane.leftAnchor="84.0">
+            <Label layoutX="84.0" layoutY="385.0" text="Location:" AnchorPane.leftAnchor="84.0">
                <font>
                   <Font name="Calibri Light" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="60.0" layoutY="435.0" text="Description:" AnchorPane.leftAnchor="60.0">
+            <Label layoutX="60.0" layoutY="425.0" text="Description:" AnchorPane.leftAnchor="60.0">
                <font>
                   <Font name="Calibri Light" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="115.0" layoutY="275.0" text="Date:" AnchorPane.leftAnchor="114.0">
+            <Label layoutX="114.0" layoutY="265.0" text="Date:" AnchorPane.leftAnchor="114.0">
                <font>
                   <Font name="Calibri Light" size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtViewApptTitle" layoutX="256.0" layoutY="112.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
-            <ComboBox fx:id="cmbViewApptType" layoutX="256.0" layoutY="152.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
-            <ComboBox fx:id="cmbViewApptCust" editable="true" layoutX="256.0" layoutY="193.0" onAction="#cmbViewApptCustHandler" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
-            <TextField fx:id="txtViewApptContact" layoutX="256.0" layoutY="232.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
-            <DatePicker fx:id="dateViewAppt" layoutX="256.0" layoutY="272.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
-            <ChoiceBox fx:id="cmbViewApptHrStart" layoutX="255.0" layoutY="312.0" onAction="#cmbNewApptStartTimeHandler" prefHeight="30.0" prefWidth="85.0" AnchorPane.rightAnchor="170.0" />
-            <ChoiceBox fx:id="cmbViewApptMinStart" layoutX="346.0" layoutY="312.0" prefHeight="30.0" prefWidth="85.0" AnchorPane.rightAnchor="79.0" />
-            <ChoiceBox fx:id="cmbViewApptHrEnd" layoutX="255.0" layoutY="352.0" prefHeight="30.0" prefWidth="85.0" AnchorPane.rightAnchor="170.0" />
-            <ChoiceBox fx:id="cmbViewApptMinEnd" layoutX="345.0" layoutY="352.0" prefHeight="30.0" prefWidth="85.0" AnchorPane.rightAnchor="79.0" />
-            <ChoiceBox fx:id="cmbViewApptLocation" layoutX="256.0" layoutY="392.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
-            <TextArea fx:id="txtViewApptDescription" layoutX="256.0" layoutY="435.0" prefHeight="93.0" prefWidth="175.0" wrapText="true" AnchorPane.rightAnchor="79.0" />
-            <Button fx:id="btnSaveViewAppt" layoutX="176.0" layoutY="541.0" mnemonicParsing="false" onAction="#saveUpdatedAppointmentButtonHandler" text="Save Appointment" AnchorPane.leftAnchor="176.0">
+            <TextField fx:id="txtViewApptTitle" layoutX="256.0" layoutY="102.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
+            <ComboBox fx:id="cmbViewApptType" layoutX="256.0" layoutY="142.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
+            <ComboBox fx:id="cmbViewApptCust" editable="true" layoutX="256.0" layoutY="183.0" onAction="#cmbViewApptCustHandler" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
+            <TextField fx:id="txtViewApptContact" layoutX="256.0" layoutY="222.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
+            <DatePicker fx:id="dateViewAppt" layoutX="256.0" layoutY="262.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
+            <ChoiceBox fx:id="cmbViewApptHrStart" layoutX="255.0" layoutY="302.0" onAction="#cmbViewApptStartTimeHandler" prefHeight="30.0" prefWidth="85.0" AnchorPane.rightAnchor="170.0" />
+            <ChoiceBox fx:id="cmbViewApptMinStart" layoutX="346.0" layoutY="302.0" onAction="#cmbViewApptTimeRefreshHandler" prefHeight="30.0" prefWidth="85.0" AnchorPane.rightAnchor="79.0" />
+            <ChoiceBox fx:id="cmbViewApptHrEnd" layoutX="255.0" layoutY="342.0" onAction="#cmbViewApptTimeRefreshHandler" prefHeight="30.0" prefWidth="85.0" AnchorPane.rightAnchor="170.0" />
+            <ChoiceBox fx:id="cmbViewApptMinEnd" layoutX="346.0" layoutY="342.0" onAction="#cmbViewApptTimeRefreshHandler" prefHeight="30.0" prefWidth="85.0" AnchorPane.rightAnchor="79.0" />
+            <ChoiceBox fx:id="cmbViewApptLocation" layoutX="256.0" layoutY="382.0" onAction="#cmbViewApptTimeRefreshHandler" prefHeight="30.0" prefWidth="175.0" AnchorPane.rightAnchor="79.0" />
+            <TextArea fx:id="txtViewApptDescription" layoutX="256.0" layoutY="425.0" prefHeight="59.0" prefWidth="175.0" wrapText="true" AnchorPane.rightAnchor="79.0" />
+            <Button fx:id="btnSaveViewAppt" layoutX="176.0" layoutY="551.0" mnemonicParsing="false" onAction="#saveUpdatedAppointmentButtonHandler" text="Save Appointment" AnchorPane.leftAnchor="176.0">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="btnClearViewAppt" layoutX="260.0" layoutY="585.0" mnemonicParsing="false" onAction="#clearViewApptButtonHandler" prefWidth="75.0" text="Clear" AnchorPane.rightAnchor="176.0">
+            <Button fx:id="btnClearViewAppt" layoutX="259.0" layoutY="595.0" mnemonicParsing="false" onAction="#clearViewApptButtonHandler" prefWidth="75.0" text="Clear" AnchorPane.rightAnchor="176.0">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="btnCancelViewAppt" layoutX="176.0" layoutY="585.0" mnemonicParsing="false" onAction="#cancelViewApptButtonHandler" prefWidth="75.0" text="Cancel" AnchorPane.leftAnchor="176.0">
+            <Button fx:id="btnCancelViewAppt" layoutX="176.0" layoutY="595.0" mnemonicParsing="false" onAction="#cancelViewApptButtonHandler" prefWidth="75.0" text="Cancel" AnchorPane.leftAnchor="176.0">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="btnViewApptViewCust" layoutX="436.0" layoutY="194.0" mnemonicParsing="false" onAction="#viewCustViewAppointmentButtonHandler" text="View" AnchorPane.rightAnchor="26.0">
+            <Button fx:id="btnViewApptViewCust" layoutX="436.0" layoutY="184.0" mnemonicParsing="false" onAction="#viewCustViewAppointmentButtonHandler" text="View" AnchorPane.rightAnchor="26.0">
                <font>
                   <Font name="Calibri Light" size="14.0" />
                </font>
             </Button>
-            <Label layoutX="113.0" layoutY="315.0" text="Start Time:" AnchorPane.leftAnchor="69.0">
+            <Label layoutX="69.0" layoutY="305.0" text="Start Time:" AnchorPane.leftAnchor="69.0">
                <font>
                   <Font name="Calibri Light" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="73.0" layoutY="355.0" text="End Time:" AnchorPane.leftAnchor="77.0">
+            <Label layoutX="77.0" layoutY="345.0" text="End Time:" AnchorPane.leftAnchor="77.0">
                <font>
                   <Font name="Calibri Light" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="lblViewApptConsultant" layoutX="213.0" layoutY="68.0" text="Consultant: User" AnchorPane.leftAnchor="213.0">
+            <Label fx:id="lblViewApptConsultant" layoutX="213.0" layoutY="58.0" text="Consultant: User" AnchorPane.leftAnchor="213.0">
                <font>
                   <Font name="Calibri Light" size="14.0" />
                </font>
             </Label>
+            <Label fx:id="lblUpdateTime1" layoutX="157.0" layoutY="494.0" text="The listed start &amp; end times are local." />
+            <Label fx:id="lblUpdateTime2" layoutX="79.0" layoutY="511.0" text="Based on your timezone, the appointment will take place between:" />
+            <Label fx:id="lblUpdateStartTime" layoutX="205.0" layoutY="530.0" text="6:00 PM - " AnchorPane.rightAnchor="250.0" />
+            <Label fx:id="lblUpdateEndTime" layoutX="260.0" layoutY="530.0" text="7:15 PM" AnchorPane.leftAnchor="260.0" />
          </children>
     </AnchorPane>
   </children>

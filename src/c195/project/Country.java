@@ -7,16 +7,16 @@ import java.sql.Timestamp;
  * @author Nick
  */
 public class Country {
-    
+
     private int countryID;
     private String countryName;
     private String createdBy;
     private String lastUpdatedBy;
     private String createDate;
     private Timestamp lastUpdate;
-    
+
     public Country() {
-        
+
     }
 
     /**
